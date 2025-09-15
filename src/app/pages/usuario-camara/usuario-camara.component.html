@@ -1,0 +1,57 @@
+<div >
+    <div class="flex justify-between items-end mb-2 bg-transparent">
+        <p-breadcrumb class="max-w-full" [model]="[{label:'Início', routerLink: '/'},{label:'Usuarios'}]" />
+         <div class="flex gap-2">
+             <p-button label="Voltar" iconPos="left" (onClick)="router.navigate([`camara/`])" />
+             <p-button label="Adicionar" icon="fa-solid fa-plus" iconPos="left" (onClick)="router.navigate([`camara/usuarios/${currentCamaraId}/adicionar`])" />
+         </div>
+    </div>
+    
+    <p-card>
+          <div class="flex flex-wrap gap-4 mb-6 items-end">
+            <div class="flex-auto">
+                <label for="integer" class="font-bold block mb-2">Filtro</label>
+                <input type="text" pInputText class="w-full" placeholder="Nome | E-mail" [(ngModel)]="formFiltro.filtro" />
+            </div>   
+            
+            <div class="flex-none flex gap-2">
+                <p-button label="Filtrar" icon="pi pi-search" (click)="filtrarUsuarios()"  />
+            </div>
+        </div>
+
+        <p-table 
+            [value]="usuariosCamara" 
+            stripedRows 
+            [tableStyle]="{'min-width': '60rem'}" 
+            [paginator]="true" 
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [lazy]="true"
+            (onPage)="loadUsuariosCamara($event)">
+            
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+                    <th pSortableColumn="eemail">E-mail <p-sortIcon field="email" /></th>
+                   
+                    <th class="flex justify-end">Opções</th>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-usuario>
+                <tr>
+                    <td>{{ usuario.usuario.nome }}</td>
+                    <td>{{ usuario.usuario.email }}</td>
+                    <td class="flex justify-end" >
+                        <p-button icon="fa-solid fa-pen" [rounded]="true" [text]="true" severity="primary" pTooltip="Editar" tooltipPosition="top" (click)="router.navigate([`camara/usuarios/${currentCamaraId}/editar/${usuario.id}`])" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    
+        <p-toast />
+    
+    </p-card>
+
+</div>
+

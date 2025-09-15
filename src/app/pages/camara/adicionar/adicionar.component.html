@@ -1,0 +1,78 @@
+<div>
+    <!-- Breadcrumb -->
+    <div class="flex justify-between items-center mb-4">
+        <p-breadcrumb class="max-w-full"
+            [model]="[{label:'Início', routerLink: '/'},{label:'Câmaras', routerLink: '/camara'},{label: pageTitle}]" />
+        <p-button label="Voltar" icon="fa-solid fa-angle-left" iconPos="left" [routerLink]="'/camara'" />
+    </div>
+    
+    <p-card [header]="isEditMode ? 'Editar' : 'Adicionar'">
+        <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+            
+            <!-- Campo Nome -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="nome" class="font-bold mb-2">Nome da Câmara*</label>
+                <input type="text" pInputText id="nome" name="nome" required [(ngModel)]="formCadastro.nome" #nomeModel="ngModel" class="w-full" />
+                @if (nomeModel.invalid && nomeModel.touched) {
+                    <small class="p-error block mt-1">Nome é obrigatório.</small>
+                }
+            </div>
+
+            <!-- Campo Email -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="email" class="font-bold mb-2">E-mail*</label>
+                <input type="email" pInputText id="email" name="email" required email [(ngModel)]="formCadastro.email" #emailModel="ngModel" class="w-full" />
+                 @if (emailModel.errors?.['required'] && emailModel.touched) {
+                    <small class="p-error block mt-1">E-mail é obrigatório.</small>
+                }
+                 @if (emailModel.errors?.['email'] && emailModel.touched) {
+                    <small class="p-error block mt-1">Formato de e-mail inválido.</small>
+                }
+            </div>
+
+            <!-- Campo CNPJ com MÁSCARA -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="cnpj" class="font-bold mb-2">CNPJ</label>
+                <p-inputMask id="cnpj" name="cnpj" mask="99.999.999/9999-99" [(ngModel)]="formCadastro.cnpj" styleClass="w-full"></p-inputMask>
+            </div>
+
+             <!-- Campo Telefone com MÁSCARA -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="telefone" class="font-bold mb-2">Telefone</label>
+                <p-inputMask id="telefone" name="telefone" mask="(99) 99999-9999" [(ngModel)]="formCadastro.telefone" [autoClear]="false" styleClass="w-full"></p-inputMask>
+            </div>
+
+            <!-- Campo Endereço -->
+            <div class="p-field flex flex-col mt-4 md:col-span-2">
+                <label for="endereco" class="font-bold mb-2">Endereço</label>
+                <input type="text" pInputText id="endereco" name="endereco" [(ngModel)]="formCadastro.endereco" class="w-full" />
+            </div>
+
+            <!-- Campo Município -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="municipio" class="font-bold mb-2">Município</label>
+                <input type="text" pInputText id="municipio" name="municipio" [(ngModel)]="formCadastro.municipio" class="w-full" />
+            </div>
+
+            <!-- Campo UF -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="uf" class="font-bold mb-2">UF</label>
+                <input type="text" pInputText id="uf" name="uf" maxlength="2" [(ngModel)]="formCadastro.uf" class="w-full" />
+            </div>
+            
+            <!-- Campo Número de Cadeiras -->
+            <div class="p-field flex flex-col mt-4">
+                <label for="numero_cadeiras" class="font-bold mb-2">Nº de Cadeiras</label>
+                <input type="number" pInputText id="numero_cadeiras" name="numero_cadeiras" [(ngModel)]="formCadastro.numero_cadeiras" class="w-full" />
+            </div>
+
+            <!-- Botão Salvar/Atualizar -->
+            <div class="mt-6 md:col-span-2 flex justify-end">
+                <p-button [label]="isEditMode ? 'Atualizar' : 'Salvar'" type="submit" [loading]="isLoading"></p-button>
+            </div>
+        </form>
+    </p-card>
+</div>
+
+<!-- O p-toast é crucial para exibir as mensagens de sucesso/erro -->
+<p-toast />

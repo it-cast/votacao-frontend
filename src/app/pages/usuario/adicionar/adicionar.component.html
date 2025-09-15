@@ -1,0 +1,102 @@
+<div>
+    <!-- Breadcrumb -->
+    <div class="flex justify-between items-center mb-4">
+        <p-breadcrumb class="max-w-full"
+            [model]="[{label:'Início', routerLink: '/'},{label:'Usuarios', routerLink: '/usuario'},{label: pageTitle}]" />
+        <p-button label="Voltar" icon="fa-solid fa-angle-left" iconPos="left" [routerLink]="'/usuario'" />
+    </div>
+    <div class="w-full max-w-5xl">
+        <p-card >
+            <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+    
+                <!-- Campo Nome -->
+                <div class="p-field flex flex-col mt-4">
+                    <label for="nome" class="font-bold mb-2">Nome*</label>
+                    <input type="text" pInputText id="nome" name="nome" required [(ngModel)]="formCadastro.nome"
+                        #nomeModel="ngModel" class="w-full" />
+                    @if (nomeModel.invalid && nomeModel.touched) {
+                    <small class="p-error block mt-1">Nome é obrigatório.</small>
+                    }
+                </div>
+    
+                <!-- Campo Email -->
+                <div class="p-field flex flex-col mt-4">
+                    <label for="email" class="font-bold mb-2">E-mail*</label>
+                    <input type="email" pInputText id="email" name="email" required email [(ngModel)]="formCadastro.email"
+                        #emailModel="ngModel" class="w-full" />
+                    @if (emailModel.errors?.['required'] && emailModel.touched) {
+                    <small class="p-error block mt-1">E-mail é obrigatório.</small>
+                    }
+                    @if (emailModel.errors?.['email'] && emailModel.touched) {
+                    <small class="p-error block mt-1">Formato de e-mail inválido.</small>
+                    }
+                </div>
+    
+                <!-- Campo Ativo -->
+                <div class="flex-1 mb-3">
+                    <label class="font-bold block mb-2">Situação*</label>
+                    <p-select [options]="ativo" required name="ativo" [(ngModel)]="formCadastro.ativo"
+                        #ativoModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
+                        [class]="ativoModel.invalid && ativoModel.touched?'ng-invalid ng-dirty':''">
+                    </p-select>
+                    <div class="mt-1" *ngIf="ativoModel.invalid && ativoModel.touched">
+                        <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                    </div>
+                </div>
+
+                <div class="flex-1 mb-3">
+                    <label class="font-bold block mb-2">Usuário Admin*</label>
+                    <p-select [options]="user_admin" required name="is_superuser" [(ngModel)]="formCadastro.is_superuser"
+                        #superUserModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
+                        [class]="superUserModel.invalid && superUserModel.touched?'ng-invalid ng-dirty':''">
+                    </p-select>
+                    <div class="mt-1" *ngIf="superUserModel.invalid && superUserModel.touched">
+                        <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                    </div>
+                </div>
+    
+    
+    
+            
+                <div class="flex-1 mb-3 mb-3">
+                    <label class="font-bold block mb-2">Senha</label>
+                    <p-password name="senha" [promptLabel]="'Digite a senha'" [weakLabel]="'Senha fraca'"
+                        [mediumLabel]="'Senha média'" [strongLabel]="'Senha forte'" [toggleMask]="true" inputStyleClass="w-full" styleClass="w-full"
+                        [(ngModel)]="formCadastro.senha" />
+                    <div class="mt-1" *ngIf="errorPassword.required">
+                        <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                    </div>
+                    <div class="mt-1" *ngIf="errorPassword.divergent">
+                        <p-message severity="error" variant="simple" size="small"> As senhas não conferem!</p-message>
+                    </div>
+                </div>
+    
+                <div class="flex-1 mb-3">
+                    <label class="font-bold block mb-2">Confirmar senha</label>
+                    <p-password name="confSenhaModel" [promptLabel]="'Digite a senha'" [weakLabel]="'Senha fraca'"
+                        [mediumLabel]="'Senha média'" [strongLabel]="'Senha forte'" [toggleMask]="true" inputStyleClass="w-full" styleClass="w-full"
+                        [(ngModel)]="formCadastro.confSenha" />
+                    <div class="mt-1" *ngIf="errorPassword.requiredConf">
+                        <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                    </div>
+                    <div class="mt-1" *ngIf="errorPassword.divergent">
+                        <p-message severity="error" variant="simple" size="small"> As senhas não conferem!</p-message>
+                    </div>
+                </div>
+            
+    
+            
+    
+            
+    
+                <!-- Botão Salvar/Atualizar -->
+                <div class="mt-6 md:col-span-2 flex justify-end">
+                    <p-button [label]="isEditMode ? 'Atualizar' : 'Salvar'" type="submit" [loading]="isLoading"></p-button>
+                </div>
+            </form>
+        </p-card>
+    </div>
+</div>
+
+<!-- O p-toast é crucial para exibir as mensagens de sucesso/erro -->
+<p-toast />

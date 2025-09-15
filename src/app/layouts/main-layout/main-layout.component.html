@@ -1,0 +1,43 @@
+<div class="flex h-screen bg-gradient-to-b from-[#eaf0f5] to-white">
+  <!-- Sidebar desktop -->
+  @if (!isMobile) {
+    <aside >
+      <app-menu 
+        [isMobile]="isMobile" 
+        [visible]="visible" 
+        (visibleChange)="visible = $event">
+      </app-menu>
+    </aside>
+  }
+
+  <!-- Drawer mobile -->
+  @if (isMobile) {
+    <p-drawer [(visible)]="visible" position="left">
+      <ng-template pTemplate="header">
+        <div class="custom-drawer-header">
+          <img src="/images/sisvote.png" width="100" alt="Sisvote Votação" />
+        </div>
+      </ng-template>
+      <app-menu 
+        [isMobile]="isMobile" 
+        [visible]="visible" 
+        (visibleChange)="visible = $event">
+      </app-menu>
+    </p-drawer>
+  }
+
+  <!-- Conteúdo principal -->
+  <div class="flex flex-col flex-1 h-screen">
+    <!-- Header -->
+    <app-header 
+      [isMobile]="isMobile" 
+      [visible]="visible" 
+      (visibleChange)="visible = $event">
+    </app-header>
+
+    <!-- Main -->
+    <main class="flex-1 p-6 overflow-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

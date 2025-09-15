@@ -1,0 +1,26 @@
+<div class="card print:hidden">
+    <p-toolbar [style]="{ 'padding': '1rem 1rem 1rem 1.5rem', 'background-color' : '#FFFFFF', 'border':0 }">
+        <ng-template #start>
+            <button (click)="toggleMenu()" class="cursor-pointer">
+               <i class="pi pi-bars"></i>
+            </button>
+        </ng-template>
+
+        <ng-template #end>
+            <div class="flex items-center gap-2">
+                <button pRipple (click)="menu.toggle($event)"
+                    class="relative overflow-hidden w-full border-0 bg-transparent flex items-start hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
+                    <p-avatar [label]="user.nome ? user.nome.charAt(0).toUpperCase() : '?'" styleClass="mr-2" size="large" [style]="{'background-color': 'var(--p-muted-bold-color)'}"
+                        shape="circle" />
+                    <span class="inline-flex flex-col items-start w-30">
+                        <span class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{{ user.nome
+                            }}</span>
+                        <span class="text-sm">Admin</span>
+                    </span>
+
+                </button>
+                <p-menu #menu [model]="items" [popup]="true" />
+            </div>
+        </ng-template>
+    </p-toolbar>
+</div>

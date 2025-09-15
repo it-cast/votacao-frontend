@@ -1,0 +1,128 @@
+<!-- Header superior -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-2 p-4 px-4 md:px-10 lg:px-60 bg-color-primary text-white text-sm">
+    <div class="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+        <span class="mr-0 sm:mr-6">
+            <i class="fa-solid fa-envelope"></i>
+            grcmonitoramentos&#64;gmail.com
+        </span>
+
+        <span class="hidden lg:inline">
+            <i class="fa-solid fa-location-dot"></i>
+            R. Gen. Odílio Dinis, n° 36
+        </span>
+
+    </div>
+
+    <div>
+        <span class="text-sm sm:text-base">
+            <i class="fa-solid fa-phone"></i> (22) 98851-0795
+        </span>
+    </div>
+</div>
+
+<!-- Logo e Menu -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 px-4 md:px-10 lg:px-60 relative">
+    
+    <div class="flex items-center justify-between w-full md:w-auto">
+        <img src="/images/logo.png" width="70" alt="" class="cursor-pointer" (click)="router.navigate([''])" />
+        
+        <button class="md:hidden text-2xl" (click)="menuAberto = !menuAberto">
+            <i class="fa-solid" [class]="menuAberto ? 'fa-xmark color-primary' : 'fa-bars color-primary'"></i>
+        </button>
+    </div>
+
+    <div
+        class="w-full md:w-auto flex flex-col md:flex-row gap-2 sm:gap-4 text-center md:items-center mt-2 md:mt-0"
+        [class]="{
+            'hidden': !menuAberto,
+            'flex': menuAberto,
+            'md:flex': true
+        }"
+    >
+        <p-button label="Início" variant="text"
+            [severity]="router.url=='/'?'primary':'secondary'"
+            (onClick)="router.navigate([''])" />
+        <p-button label="Mensalidade" variant="text"
+            [severity]="router.url=='/mensalidade'?'primary':'secondary'"
+            (onClick)="router.navigate(['mensalidade'])" />
+    </div>
+</div>
+
+<div class="flex justify-between flex-col" style="height: 84vh;">
+    <!-- Conteúdo -->
+
+    <router-outlet></router-outlet>
+    
+    <!-- Footer -->
+    <div class="bg-color-light-primary py-10 px-4 md:px-10 lg:px-60">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Logo e Redes Sociais -->
+            <div>
+                <div class="flex">
+                    <img src="/images/logo.png" width="70" alt="">
+                    <div class="border border-[var(--p-black-color-shadow)] m-4"></div>
+                    <img src="/images/itcast.png" width="120" alt="">
+
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <p-button icon="fa-brands fa-facebook" [rounded]="true" severity="primary"
+                        (onClick)="openFacebook()" />
+                    <p-button icon="fa-brands fa-instagram" [rounded]="true" severity="primary"
+                        (onClick)="openInstagram()" />
+                </div>
+            </div>
+    
+            <!-- Administrativo -->
+            <div>
+                <p class="color-primary font-bold text-lg">Administrativo</p>
+                <div class="bg-color-primary h-1 w-10 mb-4"></div>
+                <div class="flex flex-col">
+                    <p-button label="Gestão" variant="text" severity="secondary" (onClick)="router.navigate(['/login'])" />
+                </div>
+            </div>
+    
+            <!-- Mapa do site -->
+            <div>
+                <p class="color-primary font-bold text-lg">Mapa do site</p>
+                <div class="bg-color-primary h-1 w-10 mb-4"></div>
+                <div class="flex flex-col">
+                    <p-button label="Início" variant="text" severity="secondary" (onClick)="router.navigate([''])" />
+                    <p-button label="Mensalidade" variant="text" severity="secondary" (onClick)="router.navigate(['mensalidade'])" />
+                </div>
+            </div>
+    
+            <!-- Contato -->
+            <div>
+                <p class="color-primary font-bold text-lg">Contato</p>
+                <div class="bg-color-primary h-1 w-10 mb-4"></div>
+                <div class="flex flex-col text-sm">
+                    <span class="color-secondary mb-2">
+                        <i class="fa-solid fa-envelope mr-2"></i>
+                        grcmonitoramentos&#64;gmail.com
+                    </span>
+                    <span class="color-secondary mb-2">
+                        <i class="fa-solid fa-phone mr-2"></i>
+                        (22) 98851-0795
+                    </span>
+                    <span class="color-secondary">
+                        <i class="fa-solid fa-location-dot mr-2"></i>
+                        R. Gen. Odílio Dinis, n° 36 - São Félix, Santo Antônio de Pádua
+                    </span>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Divisor -->
+        <hr class="my-8">
+    
+        <!-- Créditos -->
+        <div class="flex justify-center text-center text-sm">
+            <p class="color-secondary">
+                GRC Monitoramentos © {{year}} — Desenvolvido por
+                <a href="https://itcast.com.br/" target="_blank" rel="noopener noreferrer" class="underline hover:text-color-primary">
+                    IT Cast Tecnologia
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

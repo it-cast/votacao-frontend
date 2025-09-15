@@ -1,0 +1,60 @@
+import { Routes } from '@angular/router';
+import { AuthGuard } from './guard/auth.guard';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+
+import { LoginComponent } from './pages/login/login.component';
+
+import { CamaraComponent } from './pages/camara/camara.component';
+import { AdicionarComponent } from './pages/camara/adicionar/adicionar.component';
+
+import { DashboardSistemaComponent } from './pages/dashboard-sistema/dashboard-sistema.component';
+
+import { UsuarioComponent } from './pages/usuario/usuario.component';
+import { AdicionarComponent as AdicionarUsuarioComponent } from './pages/usuario/adicionar/adicionar.component';
+
+import { UsuarioCamaraComponent } from './pages/usuario-camara/usuario-camara.component';
+import { AdicionarComponent as AdicionarUsuarioCamaraComponent } from './pages/usuario-camara/adicionar/adicionar.component';
+
+import { InvalidoComponent } from './pages/invalido/invalido.component';
+
+
+
+export const routes: Routes = [
+  
+
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      { path: '', component: LoginComponent },
+      { path: 'login', redirectTo: '', pathMatch: 'full' }, 
+      { path: 'invalido/:code', component: InvalidoComponent }
+    ]
+  },
+  
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardSistemaComponent },
+
+      { path: 'camara', component: CamaraComponent },
+      { path: 'camara/adicionar', component: AdicionarComponent },
+      { path: 'camara/editar/:id', component: AdicionarComponent},
+
+      { path: 'usuario', component: UsuarioComponent},
+      { path: 'usuario/adicionar', component: AdicionarUsuarioComponent},
+      { path: 'usuario/editar/:id', component: AdicionarUsuarioComponent},
+
+      { path: 'camara/usuarios/:camaraId', component: UsuarioCamaraComponent},
+      { path: 'camara/usuarios/:camaraId/adicionar', component: AdicionarUsuarioCamaraComponent},
+      { path: 'camara/usuarios/:camaraId/editar/:id', component: AdicionarUsuarioCamaraComponent},
+    ]
+  },
+
+  
+  { path: '**', redirectTo: 'invalido/404' }
+];
