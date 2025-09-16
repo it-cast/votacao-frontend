@@ -63,4 +63,14 @@ export class UsuarioCamaraService {
   updateCamaraUsuario(id: number, usuarioData: UsuarioCamaraCreate): Observable<UsuarioCamara> {
     return this.httpService.put(`${this.endpoint}/${id}`, usuarioData);
   }
+
+  /**
+   * Adriano 15-09-2025
+   * Deletar um usuário da câmara
+   * @param id 
+   * @returns 
+   */
+  deleteCamaraUsuario(id: number): Observable<any> {
+    return this.httpService.delete(`${this.endpoint}/${id}`);
+  }
 }

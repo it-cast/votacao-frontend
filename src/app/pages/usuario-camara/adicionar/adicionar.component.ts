@@ -1,4 +1,4 @@
-import { Component,signal } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -41,14 +41,14 @@ export class AdicionarComponent {
     breadcrumbItems!      : MenuItem[];
 
    
-    public readonly UsuarioAtivoStatus = UsuarioAtivoStatus;
-    public readonly USUARIO_ATIVO_OPCOES = USUARIO_ATIVO_OPCOES;
+    public readonly UsuarioAtivoStatus        = UsuarioAtivoStatus;
+    public readonly USUARIO_ATIVO_OPCOES      = USUARIO_ATIVO_OPCOES;
     
-    public readonly UsuarioSuperuserStatus = UsuarioSuperuserStatus;
-    public readonly USUARIO_SUPERUSER_OPCOES = USUARIO_SUPERUSER_OPCOES;
+    public readonly UsuarioSuperuserStatus    = UsuarioSuperuserStatus;
+    public readonly USUARIO_SUPERUSER_OPCOES  = USUARIO_SUPERUSER_OPCOES;
 
-    public readonly PapelNaCamara = PapelNaCamara;
-    public readonly PAPEIS_NA_CAMARA_OPCOES = PAPEIS_NA_CAMARA_OPCOES;
+    public readonly PapelNaCamara             = PapelNaCamara;
+    public readonly PAPEIS_NA_CAMARA_OPCOES   = PAPEIS_NA_CAMARA_OPCOES;
 
 
     isLoading : boolean = false;

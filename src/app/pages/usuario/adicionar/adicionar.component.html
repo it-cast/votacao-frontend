@@ -35,7 +35,7 @@
                 <!-- Campo Ativo -->
                 <div class="flex-1 mb-3">
                     <label class="font-bold block mb-2">Situação*</label>
-                    <p-select [options]="ativo" required name="ativo" [(ngModel)]="formCadastro.ativo"
+                    <p-select [options]="USUARIO_ATIVO_OPCOES " required name="ativo" [(ngModel)]="formCadastro.ativo"
                         #ativoModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
                         [class]="ativoModel.invalid && ativoModel.touched?'ng-invalid ng-dirty':''">
                     </p-select>
@@ -43,20 +43,6 @@
                         <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
                     </div>
                 </div>
-
-                <div class="flex-1 mb-3">
-                    <label class="font-bold block mb-2">Usuário Admin*</label>
-                    <p-select [options]="user_admin" required name="is_superuser" [(ngModel)]="formCadastro.is_superuser"
-                        #superUserModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
-                        [class]="superUserModel.invalid && superUserModel.touched?'ng-invalid ng-dirty':''">
-                    </p-select>
-                    <div class="mt-1" *ngIf="superUserModel.invalid && superUserModel.touched">
-                        <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                    </div>
-                </div>
-    
-    
-    
             
                 <div class="flex-1 mb-3 mb-3">
                     <label class="font-bold block mb-2">Senha</label>
@@ -84,11 +70,6 @@
                     </div>
                 </div>
             
-    
-            
-    
-            
-    
                 <!-- Botão Salvar/Atualizar -->
                 <div class="mt-6 md:col-span-2 flex justify-end">
                     <p-button [label]="isEditMode ? 'Atualizar' : 'Salvar'" type="submit" [loading]="isLoading"></p-button>

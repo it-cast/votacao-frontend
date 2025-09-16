@@ -16,10 +16,11 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { Usuario } from './usuario.model';
+import { BadgeModule } from "primeng/badge";
 
 @Component({
   selector: 'app-usuario',
-  imports: [CommonModule,FormsModule, TableModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
+  imports: [CommonModule, FormsModule, TableModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
   templateUrl: './usuario.component.html',
   styleUrl: './usuario.component.scss'
 })

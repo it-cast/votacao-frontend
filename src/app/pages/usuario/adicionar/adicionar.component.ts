@@ -17,6 +17,7 @@ import { UsuarioCreate} from '../usuario.model'
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { UsuarioService } from '../usuario.service';
+import { UsuarioAtivoStatus, USUARIO_ATIVO_OPCOES, UsuarioSuperuserStatus, USUARIO_SUPERUSER_OPCOES } from '../../../constants/usuario.constants';
 
 @Component({
   selector: 'app-adicionar',
@@ -26,23 +27,29 @@ import { UsuarioService } from '../usuario.service';
 })
 export class AdicionarComponent implements OnInit {
 
+ 
+
+  public readonly UsuarioAtivoStatus        = UsuarioAtivoStatus;
+  public readonly USUARIO_ATIVO_OPCOES      = USUARIO_ATIVO_OPCOES;
+  
+  public readonly UsuarioSuperuserStatus    = UsuarioSuperuserStatus;
+  public readonly USUARIO_SUPERUSER_OPCOES  = USUARIO_SUPERUSER_OPCOES;
+
   formCadastro: UsuarioCreate = {
     nome: '',
     email: '',
     senha: '',
     confSenha: '',
-    is_superuser: 0,
-    ativo: 1
+    is_superuser: UsuarioSuperuserStatus.SIM,
+    ativo: UsuarioAtivoStatus.SIM,
   };
 
-  isLoading: boolean = false;
-  isEditMode: boolean = false;
+  isLoading               : boolean = false;
+  isEditMode              : boolean = false;
   private currentUsuarioId: number | null = null;
-  pageTitle: string = 'Adicionar';
+  pageTitle               : string = 'Adicionar';
 
-  ativo: any = []; //-- Opções do ativo
-  user_admin: any = []; //-- Opções do user_admin
-
+ 
 
 
   errorPassword: any = {  //-- Controla a exibição do erro de senha
@@ -59,8 +66,6 @@ export class AdicionarComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.ativo = this.usuarioService.ATIVO
-    this.user_admin = this.usuarioService.SUPERUSER
 
     this.route.params.subscribe(params => {
       const id = params['id'];
@@ -73,13 +78,16 @@ export class AdicionarComponent implements OnInit {
     });
   }
 
-   loadUsuarioData(id: number): void {
+  /**
+   * Adriano 16-09-2025
+   * Puxar o usuário
+   * @param id 
+   */
+  loadUsuarioData(id: number): void {
     this.isLoading = true;
     this.usuarioService.getUsuarioById(id).subscribe({
       next: (usuario) => {
         this.formCadastro = { ...usuario };
-        console.log("formCadastro:");
-        
         console.log(this.formCadastro);
         
         this.isLoading = false;
@@ -95,8 +103,13 @@ export class AdicionarComponent implements OnInit {
     });
   }
 
-   // ... (seu código anterior)
 
+  /**
+   * Adriano 16-09-2025
+   * Salvar os dados do usuário
+   * @param form 
+   * @returns 
+   */
   onSubmit(form: NgForm): void {
       if (form.invalid) {
         Object.values(form.controls).forEach(control => control.markAsTouched());

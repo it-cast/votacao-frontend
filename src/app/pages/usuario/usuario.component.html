@@ -40,7 +40,7 @@
                 <tr>
                     <td>{{ usuario.nome }}</td>
                     <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.ativo_desc }}</td>
+                    <td><p-badge [value]="usuario.ativo_desc" [severity]="usuario.ativo?'success':'danger'" /></td>
                     <td>{{ usuario.dt_cadastro_formatada }}</td>
                     <td class="flex justify-end" >
                         <p-button icon="fa-solid fa-pen" [rounded]="true" [text]="true" severity="primary" pTooltip="Editar" tooltipPosition="top" (click)="router.navigate([`/usuario/editar/${usuario.id}`])" />
