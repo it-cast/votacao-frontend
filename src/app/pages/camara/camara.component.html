@@ -49,11 +49,13 @@
                     <td class="flex justify-end" >
                         <p-button icon="fa-solid fa-users" [rounded]="true" [text]="true" severity="primary" pTooltip="Usuarios" tooltipPosition="top" (click)="router.navigate([`camara/usuarios/${camara.id}`])" />
                         <p-button icon="fa-solid fa-pen" [rounded]="true" [text]="true" severity="primary" pTooltip="Editar" tooltipPosition="top" (click)="router.navigate([`/camara/editar/${camara.id}`])" />
+                         <p-button icon="fa-solid fa-trash" [rounded]="true" [text]="true" severity="danger"  pTooltip="Deletar" tooltipPosition="top" (click)="deleteCamara($event, camara.id)" />
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     
+        <p-confirmdialog />
         <p-toast />
     
     </p-card>

@@ -58,4 +58,15 @@ export class CamaraService {
   updateCamara(id: number, camaraData: CamaraCreate): Observable<Camara> {
     return this.httpService.put(`${this.endpoint}/${id}`, camaraData);
   }
+
+  /**
+   * Adriano 15-09-2025
+   * Deletar uma câmara
+   * @param id 
+   * @returns 
+   */
+  deleteCamara(id: number): Observable<any> {
+    return this.httpService.delete(`${this.endpoint}/${id}`);
+  }
+
 }

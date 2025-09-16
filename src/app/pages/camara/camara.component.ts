@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
-import { MessageService, LazyLoadEvent } from 'primeng/api';
+import { MessageService, LazyLoadEvent ,ConfirmationService} from 'primeng/api';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PhonePipe } from '../../pipes/phone.pipe';
@@ -16,11 +16,12 @@ import { PhonePipe } from '../../pipes/phone.pipe';
 
 import { Camara } from './camara.model'; 
 import { CamaraService } from './camara.service'; 
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-camara',
   standalone: true, 
-  imports: [TableModule,PhonePipe, FormsModule, RouterLink, CommonModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
+  imports: [TableModule,PhonePipe, FormsModule,ConfirmDialogModule, RouterLink, CommonModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
   providers: [MessageService], 
   templateUrl: './camara.component.html',
   styleUrl: './camara.component.scss'
@@ -39,7 +40,8 @@ export class CamaraComponent implements OnInit {
   constructor(
     public router: Router,
     private camaraService: CamaraService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
   ) { }
 
   ngOnInit(): void {
@@ -98,6 +100,40 @@ export class CamaraComponent implements OnInit {
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadCamaras(eventoInicial);
     
+  }
+
+  deleteCamara(event: Event, camaraId: number) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      header: 'Alerta',
+      message: 'Você tem certeza de que deseja excluir este registro?',
+      icon: 'pi pi-info-circle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Confirmar',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        return this.camaraService.deleteCamara(camaraId).subscribe(
+          (response: any) => {
+            //-- Removendo o usuário da lista
+            const index = this.camaras.findIndex((s: any) => s.id === camaraId);
+            if (index !== -1) this.camaras.splice(index, 1);
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Registro deletado com sucesso.' });
+          }, (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Alerta', detail: error.error });
+          }
+        );
+      },
+      reject: () => {
+        console.log('reject')
+      },
+    });
   }
 
 }

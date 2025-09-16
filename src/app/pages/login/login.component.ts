@@ -39,9 +39,8 @@ export class LoginComponent {
   ) { }
 
   ngOnInit() {
-    // ATUALIZADO: Usando o método isLoggedIn() do AuthService
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/camara']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -54,11 +53,23 @@ export class LoginComponent {
     this.loadingButton = true;
     this.loginService.authenticate(this.formLogin).subscribe({
       next: (response: LoginResponse) => {
-
         this.authService.storeLoginData(response);
         this.loadingButton = false;
-        if(response.usuario.is_superuser){
+
+        //-- Se for um Super Admin, vai sempre para o dashboard
+        if (response.usuario.is_superuser) {
           this.router.navigate(['/dashboard']);
+          return; // Termina a execução aqui
+        }
+
+        //-- Se for um utilizador normal, verifica o número de câmaras
+        if (response.camaras && response.camaras.length === 1) {
+          //-- Se tiver exatamente UMA câmara, seleciona-a automaticamente...
+          this.authService.storeSelectedCamara(response.camaras[0]);
+          this.router.navigate(['/dashboard']);
+        } else {
+          //-- Se tiver MAIS de uma câmara (ou nenhuma), vai para a página de seleção.
+          this.router.navigate(['/acesso']);
         }
       },
       error: (error: any) => {
