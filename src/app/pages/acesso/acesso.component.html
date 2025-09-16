@@ -1,0 +1,43 @@
+<div >
+    <div class="flex justify-between items-end mb-2 bg-transparent">
+        <p-breadcrumb class="max-w-full" [model]="[{label:'Início', routerLink: '/acesso'},{label:'Acessos'}]" />
+    </div>
+    
+    <p-card>
+
+        <p-table 
+            [value]="camaras" 
+            stripedRows 
+            [tableStyle]="{'min-width': '60rem'}" 
+           >
+            
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-camara>
+                <tr>
+                    <td> <i class="fa-solid fa-building-columns mr-3"></i> {{ camara.nome }}</td>
+                    <td class="flex justify-end" >
+                       <p-button 
+                            [label]="camara.id === selectedCamaraId ? 'Em acesso' : 'Acessar'"
+                            [severity]="camara.id === selectedCamaraId ? 'success' : 'primary'"
+                            [disabled]="camara.id === selectedCamaraId"
+                            (click)="selecionarCamara(camara)">
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    
+    </p-card>
+
+</div>
+
+
+
+
+
+

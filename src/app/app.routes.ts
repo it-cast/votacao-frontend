@@ -18,6 +18,12 @@ import { AdicionarComponent as AdicionarUsuarioCamaraComponent } from './pages/u
 
 import { InvalidoComponent } from './pages/invalido/invalido.component';
 
+import { MandatoComponent } from './pages/mandato/mandato.component';
+import { AdicionarComponent as AdicionarMandatoComponent  } from './pages/mandato/adicionar/adicionar.component';
+
+import { AcessoComponent } from './pages/acesso/acesso.component';
+
+
 
 
 export const routes: Routes = [
@@ -52,6 +58,12 @@ export const routes: Routes = [
       { path: 'camara/usuarios/:camaraId', component: UsuarioCamaraComponent},
       { path: 'camara/usuarios/:camaraId/adicionar', component: AdicionarUsuarioCamaraComponent},
       { path: 'camara/usuarios/:camaraId/editar/:id', component: AdicionarUsuarioCamaraComponent},
+
+      { path: 'mandato', component: MandatoComponent},
+      { path: 'mandato/adicionar', component: AdicionarMandatoComponent},
+      { path: 'mandato/editar/:id', component: AdicionarMandatoComponent},
+
+      { path: 'acesso', component: AcessoComponent }
     ]
   },
 

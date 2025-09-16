@@ -1,7 +1,8 @@
-// auth.service.ts
+// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
-// Interface para tipar os dados do usuário que vêm da API
+// -- Interfaces para tipar os dados --
 export interface User {
   id: number;
   email: string;
@@ -10,11 +11,16 @@ export interface User {
   is_superuser: boolean;
 }
 
-// Interface para tipar a resposta completa do endpoint de login
+export interface Camara {
+  id: number;
+  nome: string;
+}
+
 export interface LoginResponse {
   access_token: string;
   token_type: string;
   usuario: User;
+  camaras: Camara[];
 }
 
 @Injectable({
@@ -24,38 +30,40 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'authToken';
   private readonly USER_KEY = 'userData';
+  private readonly CAMARAS_KEY = 'camarasData';
+  private readonly SELECTED_CAMARA_KEY = 'selectedCamara';
 
+  // 1. Um "anunciador" (Subject) de eventos de autenticação
+  public authStateChanged = new Subject<void>();
+
+  // 2. Remova o MenuService do construtor para quebrar o ciclo
   constructor() { }
 
-  /**
-   * Adriano 10-09-2025
-   * Salva os dados de login (token e usuário) no localStorage
-   * e atualiza o estado de autenticação.
-   * @param data A resposta do endpoint de login.
-   */
   storeLoginData(data: LoginResponse): void {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem(this.TOKEN_KEY, data.access_token);
       localStorage.setItem(this.USER_KEY, JSON.stringify(data.usuario));
+      localStorage.setItem(this.CAMARAS_KEY, JSON.stringify(data.camaras || []));
+      // Limpa a câmara selecionada anteriormente para forçar uma nova seleção se necessário
+      localStorage.removeItem(this.SELECTED_CAMARA_KEY);
+      
+      // 3. Anuncie que o estado de autenticação mudou
+      this.authStateChanged.next();
     }
   }
 
-  /**
-   * Adriano 10-09-2025
-   * Remove as credenciais do usuário do localStorage e efetua o logout.
-   */
   logout(): void {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.removeItem(this.TOKEN_KEY);
       localStorage.removeItem(this.USER_KEY);
+      localStorage.removeItem(this.CAMARAS_KEY);
+      localStorage.removeItem(this.SELECTED_CAMARA_KEY);
+      
+      // 3. Anuncie que o estado de autenticação mudou
+      this.authStateChanged.next();
     }
   }
 
-  /**
-   * Adriano 10-09-2025
-   * Verifica se o usuário está logado checando a existência do token.
-   * @returns `true` se o token existir, `false` caso contrário.
-   */
   isLoggedIn(): boolean {
     if (typeof window !== 'undefined' && window.localStorage) {
       return !!localStorage.getItem(this.TOKEN_KEY);
@@ -63,11 +71,6 @@ export class AuthService {
     return false;
   }
 
-  /**
-   * Adriano 10-09-2025
-   * Retorna o token de acesso (JWT) armazenado.
-   * @returns O token como string ou null se não existir.
-   */
   getToken(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
       return localStorage.getItem(this.TOKEN_KEY);
@@ -75,15 +78,34 @@ export class AuthService {
     return null;
   }
 
-  /**
-   * Adriano 10-09-2025
-   * Retorna os dados do usuário logado.
-   * @returns O objeto do usuário ou null se não estiver logado.
-   */
   getUser(): User | null {
     if (typeof window !== 'undefined' && window.localStorage) {
       const user = localStorage.getItem(this.USER_KEY);
       return user ? JSON.parse(user) : null;
+    }
+    return null;
+  }
+
+  getCamaras(): Camara[] {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const camaras = localStorage.getItem(this.CAMARAS_KEY);
+      return camaras ? JSON.parse(camaras) : [];
+    }
+    return [];
+  }
+
+  storeSelectedCamara(camara: Camara): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(this.SELECTED_CAMARA_KEY, JSON.stringify(camara));
+      // 3. Anuncie que o estado de autenticação mudou
+      this.authStateChanged.next();
+    }
+  }
+
+  getSelectedCamara(): Camara | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const camara = localStorage.getItem(this.SELECTED_CAMARA_KEY);
+      return camara ? JSON.parse(camara) : null;
     }
     return null;
   }
