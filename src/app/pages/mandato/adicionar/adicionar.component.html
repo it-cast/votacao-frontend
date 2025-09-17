@@ -1,1 +1,61 @@
-<p>adicionar works!</p>
+
+<div >
+    <div class="flex justify-between items-end">
+        <p-breadcrumb class="max-w-full" [model]="[{label:'Início', routerLink: '/mandato'},{label:'Mandatos'}]" />
+        <p-button label="Listar mandatos" icon="fa-solid fa-angle-left" iconPos="left" iconPos="left" [routerLink]="'/mandato'" />
+    </div>
+    
+    <div class="w-full max-w-5xl">
+        <p-card>
+            <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+                  <div class="flex flex-wrap gap-4">
+                        <div class="flex-1 mb-3">
+                           <label class="font-bold block mb-2">Data Inicio</label>
+                           <input type="date" name="data_inicio" required pInputText class="w-full" [(ngModel)]="Form.data_inicio"
+                               #dtInicioModel="ngModel"
+                               [class]="dtInicioModel.invalid && dtInicioModel.touched?'ng-invalid ng-dirty':''" />
+                               @if(dtInicioModel.invalid && dtInicioModel.touched){
+                                   <div class="mt-1">
+                                       <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                                   </div>
+                               }
+                       </div>
+
+                       <div class="flex-1 mb-3">
+                           <label class="font-bold block mb-2">Data Fim</label>
+                           <input type="date" name="data_inicio" required pInputText class="w-full" [(ngModel)]="Form.data_fim"
+                               #dtFimModel="ngModel"
+                               [class]="dtFimModel.invalid && dtFimModel.touched?'ng-invalid ng-dirty':''" />
+                               @if(dtFimModel.invalid && dtFimModel.touched){
+                                   <div class="mt-1">
+                                       <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                                   </div>
+                               }
+                       </div>
+                  </div>
+    
+                  <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 mb-3">
+                        <label class="font-bold block mb-2">Descrição</label>
+                        <textarea name="descricao" rows="5" required pInputTextarea class="w-full" [(ngModel)]="Form.descricao"
+                            #descricaoModel="ngModel"
+                            [class]="descricaoModel.invalid && descricaoModel.touched?'ng-invalid ng-dirty':''"></textarea>
+                            @if(descricaoModel.invalid && descricaoModel.touched){
+                                    <div class="mt-1">
+                                        <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                                    </div>
+                            }
+                    </div>
+                </div>
+                  
+                <div class="mt-4">
+                    <p-button label="Salvar" type="submit" ></p-button>
+                </div>
+            </form>
+    
+            <!-- Elemento do toast da mensagem -->
+            <p-toast />
+        </p-card>
+    </div>
+</div>
+

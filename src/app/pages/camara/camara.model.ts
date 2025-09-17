@@ -27,6 +27,11 @@ export interface CamaraCreate {
   numero_cadeiras?: number;
 }
 
+export interface CamaraSimple {
+  id: number;
+  nome: string;
+}
+
 //-- Adriano 10-09-2025
 //-- Crie uma interface para a resposta paginada que você espera do backend
 export interface PaginatedCamaraResponse {
