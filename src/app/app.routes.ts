@@ -24,6 +24,9 @@ import { AdicionarComponent as AdicionarMandatoComponent  } from './pages/mandat
 import { VereadorMandatoComponent } from './pages/vereador-mandato/vereador-mandato.component';
 import { AdicionarComponent as AdicionarVereadorMandatoComponent } from './pages/vereador-mandato/adicionar/adicionar.component';
 
+import { ComissaoComponent } from './pages/comissao/comissao.component';
+import { AdicionarComponent as AdicionarComissaoComponent } from './pages/comissao/adicionar/adicionar.component';
+
 import { AcessoComponent } from './pages/acesso/acesso.component';
 
 
@@ -69,6 +72,10 @@ export const routes: Routes = [
       { path: 'mandato/vereadores/:mandatoId', component: VereadorMandatoComponent},
       { path: 'mandato/vereadores/:mandatoId/adicionar', component: AdicionarVereadorMandatoComponent},
       { path: 'mandato/vereadores/:mandatoId/editar/:id', component: AdicionarVereadorMandatoComponent},
+
+      { path: 'comissao', component: ComissaoComponent},
+      { path: 'comissao/adicionar', component: AdicionarComissaoComponent},
+      { path: 'comissao/editar/:id', component: AdicionarComissaoComponent},
 
       { path: 'acesso', component: AcessoComponent }
     ]
