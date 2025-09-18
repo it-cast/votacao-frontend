@@ -8,7 +8,8 @@ export interface Mandato {
   id: number;
   descricao: string;
   data_inicio: string; 
-  data_fim: string;   
+  data_fim: string;  
+  ativo: number; 
   camara_id: number;
   dt_cadastro: string; 
   dt_atualizado: string | null;
@@ -29,8 +30,9 @@ export interface Mandato {
 export interface MandatoCreate {
   id?: number | null; // Opcional, usado na edição
   descricao: string;
-  data_inicio: string; // O formulário trabalhará com strings no formato YYYY-MM-DD
+  data_inicio: string; 
   data_fim: string;
+  ativo: number;
   camara_id: number | null;
 }
 

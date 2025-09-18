@@ -29,7 +29,8 @@ import { keepOnlyNumbers } from '../../../helpers/utils/formatters'
   selector: 'app-adicionar',
   imports: [BreadcrumbModule, ButtonModule, CardModule, SelectModule, MessageModule,InputMaskModule, ToastModule, CommonModule, FormsModule,InputTextModule],
   templateUrl: './adicionar.component.html',
-  styleUrl: './adicionar.component.scss'
+  styleUrl: './adicionar.component.scss',
+  providers: [MessageService]
 })
 export class AdicionarComponent implements OnInit {
   pageTitle                 : string        = 'Adicionar';

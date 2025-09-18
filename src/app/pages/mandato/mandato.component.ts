@@ -13,10 +13,11 @@ import { Mandato } from './mandato.model';
 import { FormsModule } from '@angular/forms';
 import { MandatoService } from './mandato.service';
 import { AuthService, Camara } from '../../services/auth.service';
+import { BadgeModule } from "primeng/badge";
 
 @Component({
   selector: 'app-mandato',
-  imports: [BreadcrumbModule, ButtonModule,RouterLink,InputTextModule,CommonModule,FormsModule, CardModule, TableModule, ConfirmDialogModule, ToastModule],
+  imports: [BreadcrumbModule, ButtonModule, RouterLink, InputTextModule, CommonModule, FormsModule, CardModule, TableModule, ConfirmDialogModule, ToastModule, BadgeModule],
   templateUrl: './mandato.component.html',
   styleUrl: './mandato.component.scss'
 })

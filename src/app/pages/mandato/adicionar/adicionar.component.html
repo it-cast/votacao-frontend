@@ -32,6 +32,19 @@
                                    </div>
                                }
                        </div>
+
+                       <div class="flex-1 mb-3">
+                        <label class="font-bold block mb-2">Situação*</label>
+                        <p-select [options]="MANDATO_ATIVO_OPCOES" required name="ativo" [(ngModel)]="Form.ativo"
+                            #ativaModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
+                            [class]="ativaModel.invalid && ativaModel.touched?'ng-invalid ng-dirty':''">
+                        </p-select>
+                        @if(ativaModel.invalid && ativaModel.touched){
+                            <div class="mt-1">
+                                <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
+                            </div>
+                        }
+                    </div>
                   </div>
     
                   <div class="flex flex-wrap gap-4">

@@ -78,8 +78,9 @@ export class MenuService {
     //-- Itens de menu base para utilizadores normais (agora definidos aqui para serem dinâmicos)
     const regularUserBaseMenu: AppMenuItem[] = [
         { label: 'Dashboard', icon: 'fa-solid fa-chart-line', link: '/dashboard' },
-        { label: 'Mandatos', icon: 'fa-solid fa-calendar-check', link: '/mandato' },
         { label: 'Usuários', icon: 'fa-solid fa-users', link: `/camara/usuarios/${selectedCamara?.id}` },
+        { label: 'Mandatos', icon: 'fa-solid fa-calendar-check', link: '/mandato' },
+        { label: 'Comissões', icon: 'fa-solid fa-users-gear', link: `/comissao`}
 
     ];
 

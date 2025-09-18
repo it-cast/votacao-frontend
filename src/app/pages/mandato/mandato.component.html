@@ -30,6 +30,7 @@
                 <tr>
                    
                     <th pSortableColumn="descricao">Descrição <p-sortIcon field="descricao" /></th>
+                    <th pSortableColumn="ativo">Ativo <p-sortIcon field="ativo" /></th>
                     <th pSortableColumn="data_inicio_formatada">Data inicio <p-sortIcon field="data_inicio_formatada" /></th>
                      <th pSortableColumn="data_fim_formatada">Data fim <p-sortIcon field="data_fim_formatada" /></th>
                     <th pSortableColumn="dt_cadastro_formatada">Data de cadastro <p-sortIcon field="dt_cadastro_formatada" /></th>
@@ -40,6 +41,7 @@
             <ng-template pTemplate="body" let-mandato>
                 <tr>
                     <td>{{ mandato.descricao }}</td>
+                    <td><p-badge [value]="mandato.ativo? 'Sim' : 'Não'" [severity]="mandato.ativo?'success':'danger'" /></td>
                     <td>{{ mandato.data_inicio_formatada }}</td>
                     <td>{{ mandato.data_fim_formatada }}</td>
                     <td>{{ mandato.dt_cadastro_formatada }}</td>
@@ -48,6 +50,11 @@
                         <p-button icon="fa-solid fa-pen" [rounded]="true" [text]="true" severity="primary" pTooltip="Editar" tooltipPosition="top" (click)="router.navigate([`/mandato/editar/${mandato.id}`])" />
                         <p-button icon="fa-solid fa-trash" [rounded]="true" [text]="true" severity="danger"  pTooltip="Deletar" tooltipPosition="top" (click)="deleteMandato($event, mandato.id)" />
                     </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum mandato encontrado.</td>
                 </tr>
             </ng-template>
         </p-table>

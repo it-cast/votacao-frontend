@@ -6,6 +6,7 @@ import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { MessageModule } from "primeng/message";
 import { ToastModule } from "primeng/toast";
+import { SelectModule } from 'primeng/select'; 
 import { MandatoCreate } from '../mandato.model';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -14,21 +15,27 @@ import { UsuarioCreate } from '../../usuario/usuario.model';
 import { UsuarioService } from '../../usuario/usuario.service';
 import { MandatoService } from '../mandato.service';
 import { AuthService, Camara } from '../../../services/auth.service';
+import { MANDATO_ATIVO_OPCOES, MandatoAtivoStatus } from '../../../constants/mandato.constants';
 
 
 
 @Component({
   selector: 'app-adicionar',
-  imports: [BreadcrumbModule, ButtonModule, CardModule,InputTextModule,TextareaModule, MessageModule, ToastModule, FormsModule, RouterLink],
+  imports: [BreadcrumbModule, ButtonModule, CardModule,InputTextModule,TextareaModule, MessageModule,SelectModule, ToastModule, FormsModule, RouterLink],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })
 export class AdicionarComponent {
 
+  public readonly MANDATO_ATIVO_OPCOES = MANDATO_ATIVO_OPCOES;
+  public readonly MandatoAtivoStatus = MandatoAtivoStatus;
+
+
   Form: MandatoCreate = {
     descricao: '',
     data_inicio: '',
     data_fim: '',
+    ativo: MandatoAtivoStatus.SIM,
     camara_id: null
   }
 
