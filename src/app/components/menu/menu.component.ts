@@ -1,4 +1,3 @@
-// src/app/components/menu/menu.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AuthService, User } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -48,9 +47,16 @@ export class MenuComponent implements OnInit {
         }
     }
     
-    getClass(item: AppMenuItem) {
-        const currentBaseRoute = '/' + this.router.url.split('/')[1];
-        const isActive = currentBaseRoute === item.link;
+    getClass(item: AppMenuItem): string {
+        
+        const currentUrl = this.router.url;
+
+        const itemLink = item.link;
+
+        // A lógica agora é verificar se a URL atual COMEÇA com o link do item.
+        // Isso funciona para casos exatos e também para sub-rotas.
+        // Ex: URL '/mandato/editar/1' ainda marcará o item de menu '/mandato' como ativo.
+        const isActive = currentUrl.startsWith(itemLink);
 
         return isActive 
             ? 'block rounded-lg px-4 py-2 text-sm font-medium item-active cursor-pointer' 
