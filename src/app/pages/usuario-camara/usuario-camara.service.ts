@@ -9,7 +9,7 @@ import { UsuarioCamara, UsuarioCamaraCreate } from './usuario-camara.model';
 })
 export class UsuarioCamaraService {
 
-    private endpoint = 'usuario-camara'; // Centraliza o nome do endpoint para facilitar a manutenção
+  private endpoint = 'usuario-camara'; // Centraliza o nome do endpoint para facilitar a manutenção
 
   constructor(private httpService: HttpService) { }
 

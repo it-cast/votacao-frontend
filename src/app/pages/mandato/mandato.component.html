@@ -19,7 +19,7 @@
         <p-table 
             [value]="mandatos" 
             stripedRows 
-            [tableStyle]="{'min-width': '60rem'}" 
+            [responsive]="true"
             [paginator]="true" 
             [rows]="rows"
             [totalRecords]="totalRecords"
@@ -44,6 +44,7 @@
                     <td>{{ mandato.data_fim_formatada }}</td>
                     <td>{{ mandato.dt_cadastro_formatada }}</td>
                     <td class="flex justify-end" >
+                        <p-button icon="fa-solid fa-users" [rounded]="true" [text]="true" severity="primary" pTooltip="Vereadores" tooltipPosition="top" (click)="router.navigate([`mandato/vereadores/${mandato.id}`])" />
                         <p-button icon="fa-solid fa-pen" [rounded]="true" [text]="true" severity="primary" pTooltip="Editar" tooltipPosition="top" (click)="router.navigate([`/mandato/editar/${mandato.id}`])" />
                         <p-button icon="fa-solid fa-trash" [rounded]="true" [text]="true" severity="danger"  pTooltip="Deletar" tooltipPosition="top" (click)="deleteMandato($event, mandato.id)" />
                     </td>
