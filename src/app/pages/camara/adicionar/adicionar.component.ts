@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -10,12 +11,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { FloatLabelModule } from 'primeng/floatlabel';
-
-// 1. IMPORTAR O MÓDULO DE MÁSCARA DO PRIMENG
 import { InputMaskModule } from 'primeng/inputmask';
 
-import { CamaraCreate } from '../camara.model';
+
 import { CamaraService } from '../camara.service';
+
+import { CamaraCreate } from '../camara.model';
+import { HeaderButton } from '../../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+
+
 
 @Component({
   standalone: true,
@@ -23,7 +29,6 @@ import { CamaraService } from '../camara.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     ButtonModule,
     CardModule,
     BreadcrumbModule,
@@ -31,7 +36,8 @@ import { CamaraService } from '../camara.service';
     ToastModule,
     MessageModule,
     FloatLabelModule,
-    InputMaskModule 
+    InputMaskModule,
+    PageHeaderComponent
   ],
   providers: [MessageService],
   templateUrl: './adicionar.component.html',
@@ -55,6 +61,9 @@ export class AdicionarComponent implements OnInit {
   private currentCamaraId: number | null = null;
   pageTitle: string = 'Adicionar';
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
+
   constructor(
     private camaraService: CamaraService,
     private messageService: MessageService,
@@ -72,6 +81,16 @@ export class AdicionarComponent implements OnInit {
         this.loadCamaraData(this.currentCamaraId);
       }
     });
+
+    this.breadcrumbItems = [
+      {label:'Início', routerLink: '/'},
+      {label:'Câmaras', routerLink: '/camara'},
+      {label: this.pageTitle}
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/camara' }
+    ];
   }
 
   loadCamaraData(id: number): void {

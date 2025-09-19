@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
 import { MessageService, LazyLoadEvent, ConfirmationService } from 'primeng/api';
-import { UsuarioCamara} from './usuario-camara.model'
 import { UsuarioCamaraService } from './usuario-camara.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -15,10 +14,17 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { BadgeModule } from "primeng/badge";
+import { MenuItem } from 'primeng/api';
+
+import { UsuarioCamara } from './usuario-camara.model'
+import { HeaderButton } from '../../components/page-header/page-header.model';
+
+import { PageHeaderComponent} from '../../components/page-header/page-header.component'
+
 
 @Component({
   selector: 'app-usuario-camara',
-  imports: [ButtonModule, CardModule, TableModule, FormsModule, ConfirmDialogModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
+  imports: [ButtonModule, CardModule, TableModule,PageHeaderComponent, FormsModule, ConfirmDialogModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
   templateUrl: './usuario-camara.component.html',
   styleUrl: './usuario-camara.component.scss'
 })
@@ -30,10 +36,13 @@ export class UsuarioCamaraComponent {
   first           : number    = 0;
 
   camaraId        : number    = 0;
-  currentCamaraId: number | null = null;
+  currentCamaraId : number | null = null;
 
   private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
   formFiltro                  : any = { filtro: ''}
+
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
 
   constructor(
     public router: Router,
@@ -53,6 +62,16 @@ export class UsuarioCamaraComponent {
         this.loadUsuariosCamara(eventoInicial);
       }
     });
+
+    this.breadcrumbItems = [
+      {label:'Início', routerLink: '/'},
+      {label:'Usuarios'}
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/camara/'},
+      { label: 'Adicionar', icon: 'fa-solid fa-plus', link: `/camara/usuarios/${this.currentCamaraId}/adicionar` }
+    ]
   }
 
   /**

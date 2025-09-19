@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -15,12 +15,18 @@ import { TreeModule } from 'primeng/tree';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService,MenuItem } from 'primeng/api';
 import { AccordionModule } from 'primeng/accordion';
+
 import { UsuarioService } from '../../usuario/usuario.service';
+import { UsuarioCamaraService } from '../usuario-camara.service';
+
+import { PERMISSOES_AGRUPADAS, PermissaoGrupo, PermissaoItem } from '../../../constants/permissoes.constants';
+import { USUARIO_ATIVO_OPCOES, UsuarioAtivoStatus, USUARIO_SUPERUSER_OPCOES, UsuarioSuperuserStatus, PAPEIS_NA_CAMARA_OPCOES,PapelNaCamara } from '../../../constants/usuario.constants';
 
 import { UsuarioCamaraCreate } from '../usuario-camara.model';
-import { PERMISSOES_AGRUPADAS, PermissaoGrupo, PermissaoItem } from '../../../constants/permissoes.constants'
-import { USUARIO_ATIVO_OPCOES, UsuarioAtivoStatus, USUARIO_SUPERUSER_OPCOES, UsuarioSuperuserStatus, PAPEIS_NA_CAMARA_OPCOES,PapelNaCamara } from '../../../constants/usuario.constants'
-import { UsuarioCamaraService } from '../usuario-camara.service';
+import { HeaderButton } from '../../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+
 
 export interface Message {
   life: number;
@@ -30,7 +36,7 @@ export interface Message {
 
 @Component({
   selector: 'app-adicionar',
-  imports: [CommonModule,TreeModule, FormsModule,PasswordModule,SelectModule,AccordionModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule],
+  imports: [CommonModule, TreeModule, FormsModule, PasswordModule, SelectModule, AccordionModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule, PageHeaderComponent],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })
@@ -38,7 +44,6 @@ export class AdicionarComponent {
     pageTitle             : string        = 'Adicionar';
     currentCamaraId       : number | null = null;
     currentUsuarioCamaraId: number | null = null;
-    breadcrumbItems!      : MenuItem[];
 
    
     public readonly UsuarioAtivoStatus        = UsuarioAtivoStatus;
@@ -82,6 +87,9 @@ export class AdicionarComponent {
       divergent: false,
     };
 
+    breadcrumbItems: MenuItem[] = [];
+    headerButtons: HeaderButton[] = [];
+
     constructor(
       private messageService: MessageService,
       public router: Router,
@@ -106,15 +114,18 @@ export class AdicionarComponent {
         if (camaraId) {
           this.currentCamaraId = +camaraId;
           this.formCadastro.camara_id = this.currentCamaraId;
-        }
-
-        this.breadcrumbItems = [
-          { label: 'Início', routerLink: '/' },
-          { label: 'Usuarios', routerLink: `/camara/usuarios/${this.currentCamaraId}` },
-          { label: this.pageTitle }
-        ];
-
+        } 
       });
+      
+      this.breadcrumbItems = [
+        { label: 'Início', routerLink: '/' },
+        { label: 'Usuarios', routerLink: `/camara/usuarios/${this.currentCamaraId}` },
+        { label: this.pageTitle }
+      ];
+
+      this.headerButtons = [
+        { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: `/camara/usuarios/${this.currentCamaraId}` }
+      ];
     }
 
     /**

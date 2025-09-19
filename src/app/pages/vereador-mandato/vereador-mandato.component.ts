@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
 import { BreadcrumbModule } from "primeng/breadcrumb";
 import { Button } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -6,19 +9,22 @@ import { TableModule } from "primeng/table";
 import { BadgeModule } from "primeng/badge";
 import { ToastModule } from "primeng/toast";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { LazyLoadEvent, MessageService, ConfirmationService } from 'primeng/api';
-import { UsuarioCamara } from '../usuario-camara/usuario-camara.model';
-import { MandatoVereador} from './vereador-mandato.model'
-import { UsuarioCamaraService } from '../usuario-camara/usuario-camara.service';
-import { VereadorMandatoService } from './vereador-mandato.service';
-import { FormsModule } from '@angular/forms';
+import { LazyLoadEvent, MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
+
+
+import { VereadorMandatoService } from './vereador-mandato.service';
+
 import { FuncaoNoMandato, FUNCOES_NO_MANDATO_OPCOES, FuncaoExibir } from '../../constants/vereador.constants';
+
+import { MandatoVereador} from './vereador-mandato.model'
+import { HeaderButton } from '../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-vereador-mandato',
-  imports: [BreadcrumbModule, Button, CardModule, TableModule,InputTextModule, BadgeModule,FormsModule, ToastModule, ConfirmDialogModule],
+  imports: [BreadcrumbModule, Button, CardModule, TableModule,InputTextModule,PageHeaderComponent, BadgeModule,FormsModule, ToastModule, ConfirmDialogModule],
   templateUrl: './vereador-mandato.component.html',
   styleUrl: './vereador-mandato.component.scss'
 })
@@ -38,6 +44,9 @@ export class VereadorMandatoComponent {
   public readonly FuncaoNoMandato = FuncaoNoMandato;
   public readonly FUNCOES_NO_MANDATO_OPCOES = FUNCOES_NO_MANDATO_OPCOES;
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
+
   constructor(
     public router: Router,
     private route: ActivatedRoute,
@@ -56,6 +65,18 @@ export class VereadorMandatoComponent {
         this.loadVereadoresMandato(eventoInicial);
       }
     });
+
+    this.breadcrumbItems = [
+      {label:'Início', routerLink: '/'},
+      {label:'Mandatos', routerLink: '/mandato'},
+      {label:'Vereadores'}
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/mandato' },
+      { label: 'Adicionar', icon: 'fa-solid fa-plus', link: `/mandato/vereadores/${this.currentMandatoId}/adicionar` }
+    ]
+
   }
 
   /**

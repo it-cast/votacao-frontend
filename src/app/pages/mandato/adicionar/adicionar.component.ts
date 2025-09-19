@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Form, FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { BreadcrumbModule } from "primeng/breadcrumb";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -10,18 +11,24 @@ import { SelectModule } from 'primeng/select';
 import { MandatoCreate } from '../mandato.model';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { MessageService } from 'primeng/api';
-import { UsuarioCreate } from '../../usuario/usuario.model';
-import { UsuarioService } from '../../usuario/usuario.service';
+import { MenuItem, MessageService } from 'primeng/api';
+
 import { MandatoService } from '../mandato.service';
 import { AuthService, Camara } from '../../../services/auth.service';
+
 import { MANDATO_ATIVO_OPCOES, MandatoAtivoStatus } from '../../../constants/mandato.constants';
+
+import { HeaderButton } from '../../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+
+
 
 
 
 @Component({
   selector: 'app-adicionar',
-  imports: [BreadcrumbModule, ButtonModule, CardModule,InputTextModule,TextareaModule, MessageModule,SelectModule, ToastModule, FormsModule, RouterLink],
+  imports: [BreadcrumbModule, ButtonModule, CardModule,InputTextModule,PageHeaderComponent,TextareaModule, MessageModule,SelectModule, ToastModule, FormsModule],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })
@@ -47,6 +54,9 @@ export class AdicionarComponent {
 
   camara: Camara | null = null;
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
+
 
   constructor(
     private messageService: MessageService,
@@ -70,6 +80,18 @@ export class AdicionarComponent {
         this.loadUsuarioData(this.currentMandatoId);
       }
     });
+
+    this.breadcrumbItems = [
+      {label:'Início', routerLink: '/'},
+      {label:'Mandatos', routerLink: '/mandato'},
+      {label: this.pageTitle}
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/mandato' }
+    ];
+
+
   }
 
 

@@ -1,8 +1,6 @@
 <div >
-    <div class="flex justify-between items-end mb-2 bg-transparent">
-        <p-breadcrumb class="max-w-full" [model]="[{label:'Início', routerLink: '/'},{label:'Usuarios'}]" />
-        <p-button label="Adicionar" icon="fa-solid fa-plus" iconPos="left" (onClick)="router.navigate([`/usuario/adicionar`])" />
-    </div>
+    
+    <app-page-header [breadcrumbItems]="breadcrumbItems" [buttons]="headerButtons"></app-page-header>
     
     <p-card>
           <div class="flex flex-wrap gap-4 mb-6 items-end">

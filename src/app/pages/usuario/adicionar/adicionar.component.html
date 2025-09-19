@@ -1,10 +1,6 @@
 <div>
-    <!-- Breadcrumb -->
-    <div class="flex justify-between items-center mb-4">
-        <p-breadcrumb class="max-w-full"
-            [model]="[{label:'Início', routerLink: '/'},{label:'Usuarios', routerLink: '/usuario'},{label: pageTitle}]" />
-        <p-button label="Voltar" icon="fa-solid fa-angle-left" iconPos="left" [routerLink]="'/usuario'" />
-    </div>
+    <app-page-header [breadcrumbItems]="breadcrumbItems" [buttons]="headerButtons"></app-page-header>
+
     <div class="w-full max-w-5xl">
         <p-card >
             <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">

@@ -1,0 +1,6 @@
+/* Estilos específicos para o PageHeaderComponent podem ser adicionados aqui. */
+:host ::ng-deep .p-breadcrumb {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}

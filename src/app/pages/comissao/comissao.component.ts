@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { MessageService, LazyLoadEvent, ConfirmationService } from 'primeng/api';
+import { Router } from '@angular/router';
 
+import { MessageService, LazyLoadEvent, ConfirmationService, MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -13,11 +13,15 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { BadgeModule } from "primeng/badge";
 
-import { Comissao } from './comissao.model';
 import { ComissaoService } from './comissao.service';
 import { AuthService, Camara } from '../../services/auth.service';
-import { BadgeModule } from "primeng/badge";
+
+import { Comissao } from './comissao.model';
+import { HeaderButton } from '../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-comissao',
@@ -26,7 +30,6 @@ import { BadgeModule } from "primeng/badge";
     TableModule,
     FormsModule,
     ConfirmDialogModule,
-    RouterLink,
     CommonModule,
     ButtonModule,
     CardModule,
@@ -35,7 +38,8 @@ import { BadgeModule } from "primeng/badge";
     PaginatorModule,
     TooltipModule,
     ToastModule,
-    BadgeModule
+    BadgeModule,
+    PageHeaderComponent
 ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './comissao.component.html',
@@ -53,6 +57,9 @@ export class ComissaoComponent implements OnInit {
   private ultimoLazyLoadEvent: LazyLoadEvent = { first: 0, rows: this.rows };
   formFiltro: any = { filtro: '' }
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
+
   constructor(
     public router: Router,
     private comissaoService: ComissaoService,
@@ -63,6 +70,16 @@ export class ComissaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.camara = this.authService.getSelectedCamara();
+
+    this.breadcrumbItems = [
+      { label: 'Início', routerLink: '/' },
+      { label: 'Comissões' }
+    ];
+
+    this.headerButtons = [
+      { label: 'Adicionar', icon: 'fa-solid fa-plus', link: '/comissao/adicionar' }
+    ];
+
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadComissoes(eventoInicial);
   }

@@ -3,7 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable, of } from 'rxjs'; // Importe o Observable
+import { Observable } from 'rxjs'; // Importe o Observable
 
 import { BreadcrumbModule } from "primeng/breadcrumb";
 import { ButtonModule } from "primeng/button";
@@ -13,21 +13,24 @@ import { MessageModule } from "primeng/message";
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { ToastModule } from "primeng/toast";
-import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+import { MessageService, MenuItem } from 'primeng/api';
 
 
 import { VereadorService } from '../../vereador/vereador.service';
 import { VereadorMandatoService } from '../vereador-mandato.service';
-import { MandatoVereadorCreate } from '../vereador-mandato.model';
 
 import { FuncaoNoMandato, VeradorAtivoStatus, VEREADOR_ATIVO_OPCOES, FUNCOES_NO_MANDATO_OPCOES } from '../../../constants/vereador.constants'
 
 import { keepOnlyNumbers } from '../../../helpers/utils/formatters'
 
+import { MandatoVereadorCreate } from '../vereador-mandato.model';
+import { HeaderButton } from '../../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-adicionar',
-  imports: [BreadcrumbModule, ButtonModule, CardModule, SelectModule, MessageModule,InputMaskModule, ToastModule, CommonModule, FormsModule,InputTextModule],
+  imports: [BreadcrumbModule, ButtonModule, CardModule,PageHeaderComponent, SelectModule, MessageModule,InputMaskModule, ToastModule, CommonModule, FormsModule,InputTextModule],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss',
   providers: [MessageService]
@@ -36,7 +39,7 @@ export class AdicionarComponent implements OnInit {
   pageTitle                 : string        = 'Adicionar';
   currentMandatoId          : number | null = null;
   currentVereadorMandatoId  : number | null = null;
-  breadcrumbItems!          : MenuItem[];
+
   isEditMode                : boolean       = false;
 
   public readonly VeradorAtivoStatus = VeradorAtivoStatus;
@@ -64,6 +67,8 @@ export class AdicionarComponent implements OnInit {
   }
 
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
 
   constructor(
     public router: Router,
@@ -71,7 +76,7 @@ export class AdicionarComponent implements OnInit {
     private vereadorMandatoService: VereadorMandatoService,
     private vereadorService: VereadorService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    
   ) { }
 
   ngOnInit(): void {
@@ -91,12 +96,17 @@ export class AdicionarComponent implements OnInit {
         this.formCadastro.mandato_id = mandatoId;
       }
 
-      this.breadcrumbItems = [
-        { label: 'Início', routerLink: '/' },
-        { label: 'Vereadores', routerLink: `/mandato/vereadores/${this.currentMandatoId}` },
-        { label: this.pageTitle }
-      ];
     });
+
+    this.breadcrumbItems = [
+      { label: 'Início', routerLink: '/' },
+      { label: 'Vereadores', routerLink: `/mandato/vereadores/${this.currentMandatoId}` },
+      { label: this.pageTitle }
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: `/mandato/vereadores/${this.currentMandatoId}` }
+    ]
   }
 
   /**

@@ -1,38 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from './usuario.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
-import { MessageService, LazyLoadEvent } from 'primeng/api';
+import { MessageService, LazyLoadEvent, MenuItem } from 'primeng/api';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
+import { BadgeModule } from "primeng/badge";
+import { ButtonModule } from 'primeng/button';
 
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { UsuarioService } from './usuario.service';
 
 import { Usuario } from './usuario.model';
-import { BadgeModule } from "primeng/badge";
+import { HeaderButton } from '../../components/page-header/page-header.model'
+
+import { PageHeaderComponent} from '../../components/page-header/page-header.component'
 
 @Component({
   selector: 'app-usuario',
-  imports: [CommonModule, FormsModule, TableModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
+  imports: [CommonModule, FormsModule, TableModule, PageHeaderComponent, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
   templateUrl: './usuario.component.html',
   styleUrl: './usuario.component.scss'
 })
 export class UsuarioComponent implements OnInit {
-   isLoading    : boolean   = false;
-   usuarios     : Usuario[] = [];
-   totalRecords : number    = 0;
-   rows         : number    = 10;
-   first        : number    = 0;
+    isLoading    : boolean   = false;
+    usuarios     : Usuario[] = [];
+    totalRecords : number    = 0;
+    rows         : number    = 10;
+    first        : number    = 0;
 
-   private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
-   formFiltro                  : any = { filtro: ''}
+    private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
+    formFiltro                  : any = { filtro: ''}
+
+    breadcrumbItems: MenuItem[] = [];
+    headerButtons: HeaderButton[] = [];
 
    constructor(
     public router: Router,
@@ -42,8 +48,17 @@ export class UsuarioComponent implements OnInit {
 
 
    ngOnInit(): void {
-     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
-     this.loadUsuarios(eventoInicial);
+      this.breadcrumbItems = [
+        {label:'Início', routerLink: '/'},
+        {label:'Usuarios'}
+      ];
+
+      this.headerButtons = [
+        { label: 'Adicionar', icon: 'fa-solid fa-plus', link: '/usuario/adicionar' }
+      ]
+
+      const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
+      this.loadUsuarios(eventoInicial);
    }
 
    /**

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { TableModule, TableLazyLoadEvent } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
+import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -8,20 +11,24 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
-import { MessageService, LazyLoadEvent ,ConfirmationService} from 'primeng/api';
-import { Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { MessageService, LazyLoadEvent ,ConfirmationService, MenuItem} from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 import { PhonePipe } from '../../pipes/phone.pipe';
 
 
-import { Camara } from './camara.model'; 
 import { CamaraService } from './camara.service'; 
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { Camara } from './camara.model'; 
+import { HeaderButton } from '../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+
 
 @Component({
   selector: 'app-camara',
   standalone: true, 
-  imports: [TableModule,PhonePipe, FormsModule,ConfirmDialogModule, RouterLink, CommonModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
+  imports: [TableModule,PhonePipe, FormsModule,ConfirmDialogModule, PageHeaderComponent, CommonModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
   providers: [MessageService], 
   templateUrl: './camara.component.html',
   styleUrl: './camara.component.scss'
@@ -37,6 +44,9 @@ export class CamaraComponent implements OnInit {
   private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
   formFiltro                  : any = { filtro: ''}
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
+
   constructor(
     public router: Router,
     private camaraService: CamaraService,
@@ -45,6 +55,15 @@ export class CamaraComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.breadcrumbItems = [
+      { label: 'Início', routerLink: '/' },
+      { label: 'Câmaras' }
+    ];
+
+    this.headerButtons = [
+      { label: 'Adicionar', icon: 'fa-solid fa-plus', link: '/camara/adicionar' }
+    ]
+
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadCamaras(eventoInicial);
   }

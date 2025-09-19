@@ -1,8 +1,6 @@
 <div>
-    <div class="flex justify-between items-end">
-        <p-breadcrumb class="max-w-full" [model]="[{label:'Início', routerLink: '/'}, {label:'Comissões', routerLink: '/comissao'}, {label: pageTitle}]" />
-        <p-button label="Voltar" icon="fa-solid fa-angle-left" iconPos="left" [routerLink]="'/comissao'" />
-    </div>
+    <app-page-header [breadcrumbItems]="breadcrumbItems" [buttons]="headerButtons"></app-page-header>
+
 
     <div class="w-full max-w-5xl">
         <p-card>

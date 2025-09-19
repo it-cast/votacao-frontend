@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { BreadcrumbModule } from "primeng/breadcrumb";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -6,18 +9,21 @@ import { TableModule } from "primeng/table";
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { ToastModule } from "primeng/toast";
-import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
-import { Mandato } from './mandato.model';
+import { ConfirmationService, LazyLoadEvent, MenuItem, MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
-import { MandatoService } from './mandato.service';
-import { AuthService, Camara } from '../../services/auth.service';
 import { BadgeModule } from "primeng/badge";
+
+import { AuthService, Camara } from '../../services/auth.service';
+import { MandatoService } from './mandato.service';
+
+import { Mandato } from './mandato.model';
+import { HeaderButton } from '../../components/page-header/page-header.model'
+
+import { PageHeaderComponent} from '../../components/page-header/page-header.component'
 
 @Component({
   selector: 'app-mandato',
-  imports: [BreadcrumbModule, ButtonModule, RouterLink, InputTextModule, CommonModule, FormsModule, CardModule, TableModule, ConfirmDialogModule, ToastModule, BadgeModule],
+  imports: [BreadcrumbModule, ButtonModule, InputTextModule,PageHeaderComponent, CommonModule, FormsModule, CardModule, TableModule, ConfirmDialogModule, ToastModule, BadgeModule],
   templateUrl: './mandato.component.html',
   styleUrl: './mandato.component.scss'
 })
@@ -32,6 +38,8 @@ export class MandatoComponent {
     private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
     formFiltro                  : any = { filtro: ''}
 
+    breadcrumbItems: MenuItem[] = [];
+    headerButtons: HeaderButton[] = [];
 
     constructor(
       public router: Router,
@@ -43,6 +51,15 @@ export class MandatoComponent {
 
     ngOnInit(): void {
       this.camara = this.authService.getSelectedCamara();
+
+      this.breadcrumbItems = [
+        {label:'Início', routerLink: '/'},
+        {label:'Mandatos'}
+      ];
+
+      this.headerButtons = [
+        { label: 'Adicionar', icon: 'fa-solid fa-plus', link: '/mandato/adicionar' }
+      ]
       
       const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
       this.loadMandatos(eventoInicial);

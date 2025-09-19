@@ -1,0 +1,16 @@
+<div class="flex justify-between items-center mb-4 bg-transparent">
+  <p-breadcrumb class="max-w-full" [model]="breadcrumbItems"></p-breadcrumb>
+
+  <div class="flex gap-2">
+    @for (button of buttons; track button) {
+      <p-button 
+        [label]="button.label" 
+        [icon]="button.icon" 
+        iconPos="left"
+        [routerLink]="button.link"
+        (onClick)="button.action ? button.action() : null"
+        [styleClass]="button.styleClass">
+      </p-button>
+    }
+  </div>
+</div>

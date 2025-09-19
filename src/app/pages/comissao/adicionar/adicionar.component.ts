@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MessageService } from 'primeng/api';
 
+import { MenuItem, MessageService } from 'primeng/api';
 import { BreadcrumbModule } from "primeng/breadcrumb";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -13,10 +13,15 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { MessageModule } from "primeng/message";
 import { ToastModule } from "primeng/toast";
 
-import { ComissaoCreate } from '../comissao.model';
 import { ComissaoService } from '../comissao.service';
 import { AuthService, Camara } from '../../../services/auth.service';
+
 import { COMISSAO_ATIVA_OPCOES, ComissaoAtivoStatus } from '../../../constants/comissao.constants';
+
+import { ComissaoCreate } from '../comissao.model';
+import { HeaderButton } from '../../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-adicionar',
@@ -24,7 +29,6 @@ import { COMISSAO_ATIVA_OPCOES, ComissaoAtivoStatus } from '../../../constants/c
   imports: [
     CommonModule, 
     FormsModule, 
-    RouterLink,
     BreadcrumbModule, 
     ButtonModule, 
     CardModule, 
@@ -32,7 +36,8 @@ import { COMISSAO_ATIVA_OPCOES, ComissaoAtivoStatus } from '../../../constants/c
     InputSwitchModule, 
     MessageModule, 
     ToastModule,
-    SelectModule
+    SelectModule,
+    PageHeaderComponent
   ],
   templateUrl: './adicionar.component.html',
   styleUrls: ['./adicionar.component.scss'],
@@ -57,6 +62,9 @@ export class AdicionarComponent implements OnInit {
   pageTitle: string = 'Adicionar';
   camara: Camara | null = null;
 
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
+
   constructor(
     private messageService: MessageService,
     private router: Router,
@@ -78,6 +86,16 @@ export class AdicionarComponent implements OnInit {
         this.loadComissaoData(this.currentComissaoId);
       }
     });
+
+    this.breadcrumbItems = [
+      {label:'Início', routerLink: '/'},
+      {label:'Comissões', routerLink: '/comissao'},
+      {label: this.pageTitle}
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/comissao' }
+    ];
   }
 
   loadComissaoData(id: number): void {

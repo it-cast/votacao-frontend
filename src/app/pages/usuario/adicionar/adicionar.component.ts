@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -11,17 +12,20 @@ import { MessageModule } from 'primeng/message';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
+import { MenuItem, MessageService } from 'primeng/api';
 
-
-import { UsuarioCreate} from '../usuario.model'
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { MessageService } from 'primeng/api';
 import { UsuarioService } from '../usuario.service';
+
 import { UsuarioAtivoStatus, USUARIO_ATIVO_OPCOES, UsuarioSuperuserStatus, USUARIO_SUPERUSER_OPCOES } from '../../../constants/usuario.constants';
+
+import { UsuarioCreate} from '../usuario.model';
+import { HeaderButton } from '../../../components/page-header/page-header.model';
+
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-adicionar',
-  imports: [CommonModule, FormsModule,PasswordModule,SelectModule, RouterLink, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule],
+  imports: [CommonModule, FormsModule,PasswordModule,SelectModule,PageHeaderComponent, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })
@@ -49,14 +53,14 @@ export class AdicionarComponent implements OnInit {
   private currentUsuarioId: number | null = null;
   pageTitle               : string = 'Adicionar';
 
- 
-
-
-  errorPassword: any = {  //-- Controla a exibição do erro de senha
+  errorPassword: any = { 
     required: false,
     requiredConf: false,
     divergent: false,
   };
+
+  breadcrumbItems: MenuItem[] = [];
+  headerButtons: HeaderButton[] = [];
 
   constructor(
     private messageService: MessageService,
@@ -76,6 +80,16 @@ export class AdicionarComponent implements OnInit {
         this.loadUsuarioData(this.currentUsuarioId);
       }
     });
+
+    this.breadcrumbItems = [
+      {label:'Início', routerLink: '/'},
+      {label:'Usuários', routerLink: '/usuario'},
+      {label: this.pageTitle}
+    ];
+
+    this.headerButtons = [
+      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/usuario' }
+    ];
   }
 
   /**
