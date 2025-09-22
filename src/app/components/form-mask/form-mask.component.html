@@ -6,26 +6,23 @@
     }
   </label>
   
-  <input 
-    [type]="type"
-    pInputText
+  <p-inputMask
     [id]="name"
     [name]="name"
+    [mask]="mask"
+    [placeholder]="placeholder"
     [required]="required"
     [(ngModel)]="value"
     (ngModelChange)="onChange($event)"
-    (blur)="onBlur()" 
+    (onBlur)="onBlur()" 
     [disabled]="isDisabled || disabled"
-    [placeholder]="placeholder"
-    class="w-full" />
+    styleClass="w-full">
+  </p-inputMask>
 
   @if (ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)) {
     <div class="mt-1">
       @if (ngControl?.errors?.['required']) {
         <p-message severity="error" variant="simple" size="small">Campo obrigatório!</p-message>
-      }
-      @if (ngControl?.errors?.['email']) {
-        <p-message severity="error" variant="simple" size="small">Formato de e-mail inválido.</p-message>
       }
     </div>
   }

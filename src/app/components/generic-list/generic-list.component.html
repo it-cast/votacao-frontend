@@ -3,7 +3,6 @@
 
     <p-table 
         [value]="data" 
-        [loading]="loading"
         stripedRows 
         [responsive]="true"
         [paginator]="true" 
@@ -32,7 +31,20 @@
                                     [severity]="$any(resolveNestedValue(item, col.field) ? col.badgeConfig?.trueSeverity : col.badgeConfig?.falseSeverity)" />
                             }
                             @default {
-                                {{ resolveNestedValue(item, col.field) }}
+                                 @switch (col.pipe) {
+                                    @case ('phone') {
+                                        {{ resolveNestedValue(item, col.field) | phone }}
+                                    }
+                                    @case ('cpfCnpj') {
+                                        {{ resolveNestedValue(item, col.field) | cpfCnpj }}
+                                    }
+                                    @case ('date') {
+                                        {{ resolveNestedValue(item, col.field) | date:'dd/MM/yyyy' }}
+                                    }
+                                    @default {
+                                        {{ resolveNestedValue(item, col.field) }}
+                                    }
+                                }
                             }
                         }
                     </td>

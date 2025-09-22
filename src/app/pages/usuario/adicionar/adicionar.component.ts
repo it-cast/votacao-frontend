@@ -22,10 +22,12 @@ import { UsuarioCreate} from '../usuario.model';
 import { HeaderButton } from '../../../components/page-header/page-header.model';
 
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import { FormInputComponent } from '../../../components/form-input/form-input.component';
+import { FormSelectComponent } from '../../../components/form-select/form-select.component';
 
 @Component({
   selector: 'app-adicionar',
-  imports: [CommonModule, FormsModule,PasswordModule,SelectModule,PageHeaderComponent, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule],
+  imports: [CommonModule, FormsModule,PasswordModule,SelectModule,FormInputComponent,FormSelectComponent,PageHeaderComponent, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })

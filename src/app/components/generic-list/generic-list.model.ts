@@ -5,6 +5,8 @@ export interface ColumnDefinition {
   field: string; // Chave do objeto de dados (ex: 'descricao')
   header: string; // Texto do cabeçalho (ex: 'Descrição')
   type?: 'text' | 'badge'; // Tipo de dado para renderização especial
+  pipe?: 'phone' | 'cpfCnpj' | 'date'; 
+  
   badgeConfig?: { // Configurações específicas se o tipo for 'badge'
     trueValue: string;
     falseValue: string;
@@ -16,7 +18,9 @@ export interface ColumnDefinition {
 /**
  * Define os tipos de 'severity' compatíveis com o p-button do PrimeNG.
  */
-export type ActionSeverity = 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'contrast';
+export type ActionSeverity =  'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'contrast';
+
+
 
 /**
  * Define a estrutura para configurar um botão de ação.

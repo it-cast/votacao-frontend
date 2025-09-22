@@ -6,59 +6,90 @@
             
             <!-- Campo Nome -->
             <div class="p-field flex flex-col mt-4">
-                <label for="nome" class="font-bold mb-2">Nome da Câmara*</label>
-                <input type="text" pInputText id="nome" name="nome" required [(ngModel)]="formCadastro.nome" #nomeModel="ngModel" class="w-full" />
-                @if (nomeModel.invalid && nomeModel.touched) {
-                    <small class="p-error block mt-1">Nome é obrigatório.</small>
-                }
+                <app-form-input
+                 label="Nome da Câmara"
+                 name="nome"
+                 type="text"
+                 [(ngModel)]="formCadastro.nome"
+                 [required]="true"
+                ></app-form-input>
             </div>
 
             <!-- Campo Email -->
             <div class="p-field flex flex-col mt-4">
-                <label for="email" class="font-bold mb-2">E-mail*</label>
-                <input type="email" pInputText id="email" name="email" required email [(ngModel)]="formCadastro.email" #emailModel="ngModel" class="w-full" />
-                 @if (emailModel.errors?.['required'] && emailModel.touched) {
-                    <small class="p-error block mt-1">E-mail é obrigatório.</small>
-                }
-                 @if (emailModel.errors?.['email'] && emailModel.touched) {
-                    <small class="p-error block mt-1">Formato de e-mail inválido.</small>
-                }
+                <app-form-input
+                    label="E-mail"
+                    name="email"
+                    type="email"
+                    [(ngModel)]="formCadastro.email"
+                    [required]="true"
+                ></app-form-input>
             </div>
 
             <!-- Campo CNPJ com MÁSCARA -->
             <div class="p-field flex flex-col mt-4">
-                <label for="cnpj" class="font-bold mb-2">CNPJ</label>
-                <p-inputMask id="cnpj" name="cnpj" mask="99.999.999/9999-99" [(ngModel)]="formCadastro.cnpj" styleClass="w-full"></p-inputMask>
+                <app-form-mask
+                    label="CNPJ"
+                    name="cnpj"
+                    mask="99.999.999/9999-99"
+                    [(ngModel)]="formCadastro.cnpj"
+                    [required]="true"
+                ></app-form-mask>
             </div>
 
              <!-- Campo Telefone com MÁSCARA -->
             <div class="p-field flex flex-col mt-4">
-                <label for="telefone" class="font-bold mb-2">Telefone</label>
-                <p-inputMask id="telefone" name="telefone" mask="(99) 99999-9999" [(ngModel)]="formCadastro.telefone" [autoClear]="false" styleClass="w-full"></p-inputMask>
+                <app-form-mask
+                    label="Telefone"
+                    name="telefone"
+                    mask="(99) 99999-9999"
+                    [(ngModel)]="formCadastro.telefone"
+                    [required]="true"
+                ></app-form-mask>
             </div>
 
             <!-- Campo Endereço -->
             <div class="p-field flex flex-col mt-4 md:col-span-2">
-                <label for="endereco" class="font-bold mb-2">Endereço</label>
-                <input type="text" pInputText id="endereco" name="endereco" [(ngModel)]="formCadastro.endereco" class="w-full" />
+                <app-form-input
+                    label="Endereço"
+                    name="endereco"
+                    type="text"
+                    [(ngModel)]="formCadastro.endereco"
+                    [required]="true"
+                ></app-form-input>
             </div>
 
             <!-- Campo Município -->
             <div class="p-field flex flex-col mt-4">
-                <label for="municipio" class="font-bold mb-2">Município</label>
-                <input type="text" pInputText id="municipio" name="municipio" [(ngModel)]="formCadastro.municipio" class="w-full" />
+                <app-form-input
+                    label="Município"
+                    name="municipio"
+                    type="text"
+                    [(ngModel)]="formCadastro.municipio"
+                    [required]="true"
+                ></app-form-input>
             </div>
 
             <!-- Campo UF -->
             <div class="p-field flex flex-col mt-4">
-                <label for="uf" class="font-bold mb-2">UF</label>
-                <input type="text" pInputText id="uf" name="uf" maxlength="2" [(ngModel)]="formCadastro.uf" class="w-full" />
+                <app-form-input
+                    label="UF"
+                    name="uf"
+                    type="text"
+                    [(ngModel)]="formCadastro.uf"
+                    [required]="true"
+                ></app-form-input>
             </div>
             
             <!-- Campo Número de Cadeiras -->
             <div class="p-field flex flex-col mt-4">
-                <label for="numero_cadeiras" class="font-bold mb-2">Nº de Cadeiras</label>
-                <input type="number" pInputText id="numero_cadeiras" name="numero_cadeiras" [(ngModel)]="formCadastro.numero_cadeiras" class="w-full" />
+                <app-form-input
+                    label="Nº de Cadeiras"
+                    name="numero_cadeiras"
+                    type="number"
+                    [(ngModel)]="formCadastro.numero_cadeiras"
+                    [required]="true"
+                ></app-form-input>
             </div>
 
             <!-- Botão Salvar/Atualizar -->

@@ -56,3 +56,9 @@ export interface MandatoVereadorUpdate {
     funcao: number;
     vereador: VereadorInMandatoUpdate;
 }
+
+export interface PaginatedMandatoVereadorResponse {
+  items: MandatoVereador[];
+  total: number;
+
+}

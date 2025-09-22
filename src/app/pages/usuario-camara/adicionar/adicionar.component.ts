@@ -26,6 +26,9 @@ import { UsuarioCamaraCreate } from '../usuario-camara.model';
 import { HeaderButton } from '../../../components/page-header/page-header.model';
 
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import {  FormInputComponent } from '../../../components/form-input/form-input.component';
+import { FormSelectComponent } from '../../../components/form-select/form-select.component';
+import { AuthService } from '../../../services/auth.service';
 
 
 export interface Message {
@@ -36,7 +39,7 @@ export interface Message {
 
 @Component({
   selector: 'app-adicionar',
-  imports: [CommonModule, TreeModule, FormsModule, PasswordModule, SelectModule, AccordionModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule, PageHeaderComponent],
+  imports: [CommonModule, TreeModule, FormsModule, PasswordModule,FormInputComponent,FormSelectComponent, SelectModule, AccordionModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, ToastModule, MessageModule, FloatLabelModule, PageHeaderComponent],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })
@@ -45,6 +48,9 @@ export class AdicionarComponent {
     currentCamaraId       : number | null = null;
     currentUsuarioCamaraId: number | null = null;
 
+    IS_SUPER_USER_SIM:  number = 1;
+    IS_SUPER_USER_NAO:  number = 0;
+ 
    
     public readonly UsuarioAtivoStatus        = UsuarioAtivoStatus;
     public readonly USUARIO_ATIVO_OPCOES      = USUARIO_ATIVO_OPCOES;
@@ -80,6 +86,7 @@ export class AdicionarComponent {
     selectedFiles : PermissaoItem[]   = [];  
     emailBuscar   : string            = '';
     isEditMode    : boolean           = false;
+    usuarioExiste : boolean = false;
 
     errorPassword: any = {  
       required: false,
@@ -90,16 +97,27 @@ export class AdicionarComponent {
     breadcrumbItems: MenuItem[] = [];
     headerButtons: HeaderButton[] = [];
 
+    usuarioAuth: any;
+
+
+
     constructor(
       private messageService: MessageService,
       public router: Router,
       private route: ActivatedRoute,
       private usuarioService: UsuarioService,
       private usuarioCamaraService: UsuarioCamaraService,
+      private authService: AuthService
 
-    ){}
-
-    ngOnInit(): void {
+    ){
+      
+    }
+    
+    ngOnInit() {
+      this.usuarioAuth = this.authService.getUser();
+      console.log(this.usuarioAuth);
+      
+      
       this.route.params.subscribe(params => {
         const camaraId = params['camaraId'];
         const id = params['id'];
@@ -139,13 +157,25 @@ export class AdicionarComponent {
         
         this.usuarioService.getUsuarioByEmail(email).subscribe({
           next: (resposta) => {
-            console.log(resposta);
-            this.formCadastro.usuario.nome = resposta.nome;
-            this.formCadastro.usuario.email = resposta.email;
-            this.formCadastro.usuario.ativo = resposta.ativo;
-            this.formCadastro.usuario.is_superuser = resposta.is_superuser;
-            this.formCadastro.usuario.id = resposta.id;
-            this.formCadastro.usuario_id = resposta.id;
+            
+            if(resposta.is_superuser == this.IS_SUPER_USER_NAO){
+              this.formCadastro = {
+                ...this.formCadastro, 
+                usuario: { 
+                  ...this.formCadastro.usuario, 
+                  nome: resposta.nome,
+                  email: resposta.email,
+                  ativo: resposta.ativo,
+                  is_superuser: resposta.is_superuser,
+                  id: resposta.id,
+                  senha: '', 
+                  confSenha: ''
+                },
+                usuario_id: resposta.id
+              };
+              this.usuarioExiste = true;
+            }
+
           },
           error: (erro) => {
             console.error('Erro ao verificar e-mail:', erro);
@@ -200,6 +230,7 @@ export class AdicionarComponent {
       this.usuarioCamaraService.getCamaraUsuarioById(id).subscribe({
         next: (usuario) => {
           console.log("usuario");
+
           this.preencherFormularioComFor(usuario);
           this.isLoading = false;
         },
@@ -372,4 +403,6 @@ export class AdicionarComponent {
         }
       });
     }
+
+    get isEditingSelf(): boolean { return (this.isEditMode || this.usuarioExiste) && this.formCadastro.usuario.id !== this.usuarioAuth?.id }
 }

@@ -7,76 +7,76 @@
             <form #form="ngForm" (ngSubmit)="onSubmit(form)">
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Nome*</label>
-                        <input type="text" name="nome" required pInputText class="w-full" [(ngModel)]="formCadastro.vereador!.nome"
-                            #nomeModel="ngModel"
-                            [class]="nomeModel.invalid && nomeModel.touched?'ng-invalid ng-dirty':''" />
-                        <div class="mt-1" *ngIf="nomeModel.invalid && nomeModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-input
+                            label="Nome"
+                            name="nome"
+                            type="text"
+                            [(ngModel)]="formCadastro.vereador!.nome"
+                            [required]="true"
+                        ></app-form-input>
                     </div>
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Partido*</label>
-                        <input type="text" name="partido" required pInputText class="w-full" [(ngModel)]="formCadastro.vereador!.partido"
-                            #partidoModel="ngModel"
-                            [class]="partidoModel.invalid && partidoModel.touched?'ng-invalid ng-dirty':''" />
-                        <div class="mt-1" *ngIf="partidoModel.invalid && partidoModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
-                    </div>
-                </div>
-                 <div class="flex flex-wrap gap-4">
-                    <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">E-mail*</label>
-                        <input type="text" name="email" required pInputText class="w-full" [(ngModel)]="formCadastro.vereador!.email"
-                            #emailModel="ngModel"
-                            [class]="emailModel.invalid && emailModel.touched?'ng-invalid ng-dirty':''" (blur)="BuscarVereador('email')" />
-                        <div class="mt-1" *ngIf="emailModel.invalid && emailModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-input
+                            label="Partido"
+                            name="partido"
+                            type="text"
+                            [(ngModel)]="formCadastro.vereador!.partido"
+                            [required]="true"
+                        ></app-form-input>
                     </div>
                 </div>
                  <div class="flex flex-wrap gap-4">
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">CPF*</label>
-                       <p-inputmask mask="999.999.999-99" required name="cpf" styleClass="w-full"
-                            [(ngModel)]="formCadastro.vereador!.cpf" #cpfModel="ngModel"
-                            [class]="cpfModel.invalid && cpfModel.touched?'ng-invalid ng-dirty':''" (blur)="BuscarVereador('cpf')" />
-
-                        <div class="mt-1" *ngIf="cpfModel.invalid && cpfModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-input
+                            label="E-mail"
+                            name="email"
+                            type="text"
+                            [(ngModel)]="formCadastro.vereador!.email"
+                            [required]="true"
+                        ></app-form-input>
+                    </div>
+                </div>
+                 <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 mb-3">
+                        <app-form-mask
+                            label="CPF"
+                            name="cpf"
+                            type="text"
+                            [(ngModel)]="formCadastro.vereador!.cpf"
+                            [required]="true"
+                            [mask]="'999.999.999-99'"
+                            (blurEvent)="BuscarVereador('cpf')"
+                        ></app-form-mask>
                     </div>
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Telefone*</label>
-                         <p-inputmask mask="(99) 99999-9999" required name="telefone" styleClass="w-full"
-                            [(ngModel)]="formCadastro.vereador!.telefone" #telefoneModel="ngModel"
-                            [class]="telefoneModel.invalid && telefoneModel.touched?'ng-invalid ng-dirty':''" />
-                        <div class="mt-1" *ngIf="telefoneModel.invalid && telefoneModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-mask
+                            label="Telefone"
+                            name="telefone"
+                            type="text"
+                            [(ngModel)]="formCadastro.vereador!.telefone"
+                            [required]="true"
+                            [mask]="'(99) 99999-9999'"
+                        ></app-form-mask>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-4">
                    <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Situação*</label>
-                        <p-select [options]="VEREADOR_ATIVO_OPCOES" required name="ativo" [(ngModel)]="formCadastro.vereador!.ativo"
-                            #secaoModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
-                            [class]="secaoModel.invalid && secaoModel.touched?'ng-invalid ng-dirty':''">
-                        </p-select>
-                        <div class="mt-1" *ngIf="secaoModel.invalid && secaoModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-select
+                            label="Situação"
+                            name="ativo"
+                            [(ngModel)]="formCadastro.vereador!.ativo"
+                            [required]="true"
+                            [options]="VEREADOR_ATIVO_OPCOES"
+                        ></app-form-select>
                     </div>
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Função*</label>
-                        <p-select [options]="FUNCOES_NO_MANDATO_OPCOES" required name="funcao" [(ngModel)]="formCadastro.funcao"
-                            #funcaoModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
-                            [class]="funcaoModel.invalid && funcaoModel.touched?'ng-invalid ng-dirty':''">
-                        </p-select>
-                        <div class="mt-1" *ngIf="funcaoModel.invalid && funcaoModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-select
+                         label="Função"
+                         name="funcao"
+                         [(ngModel)]="formCadastro.funcao"
+                         [required]="true"
+                         [options]="FUNCOES_NO_MANDATO_OPCOES"
+                        ></app-form-select>
                     </div>
                 </div>
     
@@ -85,7 +85,6 @@
                 </div>
             </form>
     
-            <!-- Elemento do toast da mensagem -->
             <p-toast />
         </p-card>
     </div>

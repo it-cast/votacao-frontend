@@ -14,8 +14,6 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService, LazyLoadEvent ,ConfirmationService, MenuItem} from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
-import { PhonePipe } from '../../pipes/phone.pipe';
-
 
 import { CamaraService } from './camara.service'; 
 
@@ -23,12 +21,16 @@ import { Camara } from './camara.model';
 import { HeaderButton } from '../../components/page-header/page-header.model';
 
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { ColumnDefinition, ActionDefinition } from '../../components/generic-list/generic-list.model';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
+
+
 
 
 @Component({
   selector: 'app-camara',
   standalone: true, 
-  imports: [TableModule,PhonePipe, FormsModule,ConfirmDialogModule, PageHeaderComponent, CommonModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
+  imports: [TableModule, FormsModule,ConfirmDialogModule, GenericListComponent, PageHeaderComponent, CommonModule, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule],
   providers: [MessageService], 
   templateUrl: './camara.component.html',
   styleUrl: './camara.component.scss'
@@ -36,10 +38,14 @@ import { PageHeaderComponent } from '../../components/page-header/page-header.co
 export class CamaraComponent implements OnInit {
   
   isLoading                   : boolean   = false; 
-  camaras                     : Camara[]  = [];
+  listData                    : Camara[]  = [];
   totalRecords                : number    = 0;
   rows                        : number    = 10; 
   first                       : number    = 0;
+
+  listColumns     : ColumnDefinition[] = [];
+  listActions     : ActionDefinition[] = [];
+ 
   
   private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
   formFiltro                  : any = { filtro: ''}
@@ -66,6 +72,8 @@ export class CamaraComponent implements OnInit {
 
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadCamaras(eventoInicial);
+
+    this.setupListComponent()
   }
 
   /**
@@ -94,7 +102,7 @@ export class CamaraComponent implements OnInit {
   carregarCamaras(skip: number, limit: number, filtro?: string){
      this.camaraService.getCamaras(skip, limit, filtro).subscribe({
       next: (response: any) => {
-        this.camaras = response.items;
+        this.listData = response.items;
         this.totalRecords = response.total;
         
         this.isLoading = false;
@@ -121,9 +129,8 @@ export class CamaraComponent implements OnInit {
     
   }
 
-  deleteCamara(event: Event, camaraId: number) {
+  deleteCamara(camaraId: number) {
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       header: 'Alerta',
       message: 'Você tem certeza de que deseja excluir este registro?',
       icon: 'pi pi-info-circle',
@@ -141,8 +148,8 @@ export class CamaraComponent implements OnInit {
         return this.camaraService.deleteCamara(camaraId).subscribe(
           (response: any) => {
             //-- Removendo o usuário da lista
-            const index = this.camaras.findIndex((s: any) => s.id === camaraId);
-            if (index !== -1) this.camaras.splice(index, 1);
+            const index = this.listData.findIndex((s: any) => s.id === camaraId);
+            if (index !== -1) this.listData.splice(index, 1);
             this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Registro deletado com sucesso.' });
           }, (error) => {
             this.messageService.add({ severity: 'error', summary: 'Alerta', detail: error.error });
@@ -153,6 +160,48 @@ export class CamaraComponent implements OnInit {
         console.log('reject')
       },
     });
+  }
+
+
+  /*
+    * Adriano 22-09-2025
+    * Ajustar as dados para adicionar no component
+  */
+  private setupListComponent(): void {
+      this.listColumns = [
+        { field: 'nome', header: 'Nome' },
+        { field: 'municipio', header: 'Municipio' },
+        { field: 'uf', header: 'UF' },
+        { field: 'telefone', header: 'Telefone', pipe: 'phone' },
+        { field: 'numero_cadeiras', header: 'Número de Cadeiras' },
+        { field: 'dt_cadastro_formatada', header: 'Data de Cadastro'}
+        
+      ];
+
+      this.listActions = [
+        { actionId:  'usuarios', icon: 'fa-solid fa-users', tooltip: 'Usuarios', severity: 'secondary'},
+        { actionId: 'edit', icon: 'fa-solid fa-pen', tooltip: 'Editar', severity: 'secondary' },
+        { actionId: 'delete', icon: 'fa-solid fa-trash', tooltip: 'Deletar', severity: 'danger' }
+      ];
+  }
+
+    /**
+   * Adriano 22-09-2025
+   * Controlar a funções que seram chamadas no clique dos botões
+   * @param event 
+   */
+  handleAction(event: { action: ActionDefinition, item: Camara }): void {
+    switch (event.action.actionId) {
+      case 'usuarios':
+        this.router.navigate([`/camara/usuarios/${event.item.id}`]);
+        break;
+      case 'edit':
+        this.router.navigate([`/camara/editar/${event.item.id}`]);
+        break;
+      case 'delete':
+        this.deleteCamara(event.item.id);
+        break;
+    }
   }
 
 }

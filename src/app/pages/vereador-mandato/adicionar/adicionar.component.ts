@@ -27,10 +27,14 @@ import { MandatoVereadorCreate } from '../vereador-mandato.model';
 import { HeaderButton } from '../../../components/page-header/page-header.model';
 
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import { FormInputComponent } from '../../../components/form-input/form-input.component';
+import { FormSelectComponent } from '../../../components/form-select/form-select.component';
+import { FormMaskComponent } from '../../../components/form-mask/form-mask.component';
+import { FormTextareaComponent } from "../../../components/form-textarea/form-textarea.component";
 
 @Component({
   selector: 'app-adicionar',
-  imports: [BreadcrumbModule, ButtonModule, CardModule,PageHeaderComponent, SelectModule, MessageModule,InputMaskModule, ToastModule, CommonModule, FormsModule,InputTextModule],
+  imports: [BreadcrumbModule, ButtonModule, CardModule, PageHeaderComponent, FormInputComponent, FormSelectComponent, FormMaskComponent, SelectModule, MessageModule, InputMaskModule, ToastModule, CommonModule, FormsModule, InputTextModule, FormTextareaComponent],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss',
   providers: [MessageService]

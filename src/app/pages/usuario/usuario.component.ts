@@ -18,21 +18,25 @@ import { UsuarioService } from './usuario.service';
 
 import { Usuario } from './usuario.model';
 import { HeaderButton } from '../../components/page-header/page-header.model'
+import { ColumnDefinition, ActionDefinition } from '../../components/generic-list/generic-list.model';
 
-import { PageHeaderComponent} from '../../components/page-header/page-header.component'
+import { PageHeaderComponent} from '../../components/page-header/page-header.component';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
 
 @Component({
   selector: 'app-usuario',
-  imports: [CommonModule, FormsModule, TableModule, PageHeaderComponent, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
+  imports: [CommonModule, FormsModule, TableModule, PageHeaderComponent,GenericListComponent, ButtonModule, CardModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
   templateUrl: './usuario.component.html',
   styleUrl: './usuario.component.scss'
 })
 export class UsuarioComponent implements OnInit {
     isLoading    : boolean   = false;
-    usuarios     : Usuario[] = [];
+    listData     : Usuario[] = [];
     totalRecords : number    = 0;
     rows         : number    = 10;
     first        : number    = 0;
+    listColumns  : ColumnDefinition[] = [];
+    listActions  : ActionDefinition[] = [];
 
     private ultimoLazyLoadEvent : LazyLoadEvent = { first: 0, rows: this.rows };
     formFiltro                  : any = { filtro: ''}
@@ -59,6 +63,8 @@ export class UsuarioComponent implements OnInit {
 
       const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
       this.loadUsuarios(eventoInicial);
+
+      this.setupListComponent();
    }
 
    /**
@@ -85,7 +91,7 @@ export class UsuarioComponent implements OnInit {
    carregarDados(skip: number, limit: number, filtro?: string){
      this.usuarioService.getUsuarios(skip, limit, filtro).subscribe({
        next: (response: any) => {
-         this.usuarios = response.items;
+         this.listData = response.items;
          this.totalRecords = response.total;
          this.isLoading = false;
        },
@@ -101,6 +107,38 @@ export class UsuarioComponent implements OnInit {
 
      })
    }
+
+    /*
+       * Adriano 22-09-2025
+       * Ajustar as dados para adicionar no component
+     */
+     private setupListComponent(): void {
+         this.listColumns = [
+           { field: 'nome', header: 'Nome' },
+           { field: 'email', header: 'E-mail' },
+           { field: 'ativo', header: 'Ativo', type: 'badge', badgeConfig: { trueValue: 'Sim', falseValue: 'Não', trueSeverity: 'success', falseSeverity: 'danger' } },
+           { field: 'dt_cadastro_formatada', header: 'Data de Cadastro'}
+         ];
+   
+         this.listActions = [
+           { actionId: 'edit', icon: 'fa-solid fa-pen', tooltip: 'Editar', severity: 'secondary' },
+          //  { actionId: 'delete', icon: 'fa-solid fa-trash', tooltip: 'Deletar', severity: 'danger' }
+         ];
+     }
+   
+      /**
+      * Adriano 22-09-2025
+      * Controlar a funções que seram chamadas no clique dos botões
+      * @param event 
+      */
+     handleAction(event: { action: ActionDefinition, item: Usuario }): void {
+       switch (event.action.actionId) {
+         case 'edit':
+           this.router.navigate([`/usuario/editar/${event.item.id}`]);
+           break;
+         
+       }
+     }
 
     /**
      * Adriano 10-09-2025

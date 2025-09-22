@@ -7,70 +7,70 @@
             <form #form="ngForm" (ngSubmit)="onSubmit(form)">
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Nome*</label>
-                        <input type="text" name="nome" required pInputText class="w-full" [(ngModel)]="formCadastro.usuario.nome"
-                            #nomeModel="ngModel"
-                            [class]="nomeModel.invalid && nomeModel.touched?'ng-invalid ng-dirty':''" />
-                        <div class="mt-1" *ngIf="nomeModel.invalid && nomeModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                        <app-form-input
+                            label="Nome"
+                            name="nome"
+                            type="text"
+                            [(ngModel)]="formCadastro.usuario.nome"
+                            [required]="true"
+                            [disabled]="isEditingSelf"
+                            >
+                        </app-form-input>
                     </div>
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Situação*</label>
-                        <p-select [options]="USUARIO_ATIVO_OPCOES" required name="ativo" [(ngModel)]="formCadastro.ativo"
-                            #secaoModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
-                            [class]="secaoModel.invalid && secaoModel.touched?'ng-invalid ng-dirty':''">
-                        </p-select>
-                        <div class="mt-1" *ngIf="secaoModel.invalid && secaoModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                         <app-form-select
+                            label="Situação"
+                            name="ativo"
+                            [options]="USUARIO_ATIVO_OPCOES"
+                            [(ngModel)]="formCadastro.ativo"
+                            [required]="true"
+                            >
+                        </app-form-select>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">E-mail*</label>
-                        <input type="text" name="email" required pInputText class="w-full" [(ngModel)]="formCadastro.usuario.email"
-                            #emailModel="ngModel"
-                            [class]="emailModel.invalid && emailModel.touched?'ng-invalid ng-dirty':''" (blur)="BuscarUsuario()" />
-                        <div class="mt-1" *ngIf="emailModel.invalid && emailModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                         <app-form-input
+                            label="E-mail"
+                            name="email"
+                            type="text"
+                            [(ngModel)]="formCadastro.usuario.email"
+                            [required]="true"
+                            (blurEvent)="BuscarUsuario()"
+                            [disabled]="isEditingSelf"
+                        >
+                        </app-form-input>
                     </div>
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Papel*</label>
-                        <p-select [options]="PAPEIS_NA_CAMARA_OPCOES" required name="pael" [(ngModel)]="formCadastro.papel"
-                            #papelModel="ngModel" optionLabel="value" optionValue="key" class="w-full"
-                            [class]="papelModel.invalid && papelModel.touched?'ng-invalid ng-dirty':''">
-                        </p-select>
-                        <div class="mt-1" *ngIf="papelModel.invalid && papelModel.touched">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
+                         <app-form-select
+                            label="Papel"
+                            name="papel"
+                            [options]="PAPEIS_NA_CAMARA_OPCOES"
+                            [(ngModel)]="formCadastro.papel"
+                            [required]="true">
+                        </app-form-select>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 mb-3 mr-3">
-                        <label class="font-bold block mb-2">Senha</label>
-                        <p-password name="senha" [promptLabel]="'Digite a senha'" [weakLabel]="'Senha fraca'"
-                            [mediumLabel]="'Senha média'" [strongLabel]="'Senha forte'" [toggleMask]="true" inputStyleClass="w-full" styleClass="w-full"
-                            [(ngModel)]="formCadastro.usuario.senha" />
-                        <div class="mt-1" *ngIf="errorPassword.required">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
-                        <div class="mt-1" *ngIf="errorPassword.divergent">
-                            <p-message severity="error" variant="simple" size="small"> As senhas não conferem!</p-message>
-                        </div>
+                        <app-form-input
+                            label="Senha"
+                            name="senha"
+                            type="password"
+                            [(ngModel)]="formCadastro.usuario.senha"
+                            [required]="!isEditMode && !usuarioExiste"
+                              [disabled]="isEditingSelf"
+                        ></app-form-input>
                     </div>
                     <div class="flex-1 mb-3">
-                        <label class="font-bold block mb-2">Confirmar senha</label>
-                        <p-password name="confSenhaModel" [promptLabel]="'Digite a senha'" [weakLabel]="'Senha fraca'"
-                            [mediumLabel]="'Senha média'" [strongLabel]="'Senha forte'" [toggleMask]="true" inputStyleClass="w-full" styleClass="w-full"
-                            [(ngModel)]="formCadastro.usuario.confSenha" />
-                        <div class="mt-1" *ngIf="errorPassword.requiredConf">
-                            <p-message severity="error" variant="simple" size="small"> Campo obrigatório!</p-message>
-                        </div>
-                        <div class="mt-1" *ngIf="errorPassword.divergent">
-                            <p-message severity="error" variant="simple" size="small"> As senhas não conferem!</p-message>
-                        </div>
+                        <app-form-input
+                            label="Confirmar senha"
+                            name="confSenha"
+                            type="password"
+                            [(ngModel)]="formCadastro.usuario.confSenha"
+                            [required]="!isEditMode && !usuarioExiste"
+                            [disabled]="isEditingSelf"
+                        ></app-form-input>
                     </div>
                 </div>
     
@@ -88,7 +88,6 @@
                 </div>
             </form>
     
-            <!-- Elemento do toast da mensagem -->
             <p-toast />
         </p-card>
     </div>

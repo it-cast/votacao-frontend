@@ -16,22 +16,28 @@ import { FormsModule } from '@angular/forms';
 import { BadgeModule } from "primeng/badge";
 import { MenuItem } from 'primeng/api';
 
+import { AuthService, Camara } from '../../services/auth.service';
+
 import { UsuarioCamara } from './usuario-camara.model'
 import { HeaderButton } from '../../components/page-header/page-header.model';
 
 import { PageHeaderComponent} from '../../components/page-header/page-header.component'
+import { GenericListComponent} from '../../components/generic-list/generic-list.component'
+import { ColumnDefinition, ActionDefinition } from '../../components/generic-list/generic-list.model';
 
 
 @Component({
   selector: 'app-usuario-camara',
-  imports: [ButtonModule, CardModule, TableModule,PageHeaderComponent, FormsModule, ConfirmDialogModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
+  imports: [ButtonModule, CardModule, TableModule,PageHeaderComponent,GenericListComponent, FormsModule, ConfirmDialogModule, BreadcrumbModule, InputTextModule, PaginatorModule, TooltipModule, ToastModule, BadgeModule],
   templateUrl: './usuario-camara.component.html',
   styleUrl: './usuario-camara.component.scss'
 })
 export class UsuarioCamaraComponent {
   isLoading       : boolean   = false;
-  usuariosCamara  : UsuarioCamara[] = [];
-  totalRecords    : number    = 0;
+  listData        : UsuarioCamara[] = [];
+  listColumns     : ColumnDefinition[] = [];
+  listActions     : ActionDefinition[] = [];
+  totalRecords    : number = 0;
   rows            : number    = 10;
   first           : number    = 0;
 
@@ -44,34 +50,78 @@ export class UsuarioCamaraComponent {
   breadcrumbItems: MenuItem[] = [];
   headerButtons: HeaderButton[] = [];
 
+  camara: Camara | null = null;
+
+
   constructor(
-    public router: Router,
+    public  router: Router,
     private route: ActivatedRoute,
     private usuarioCamaraService: UsuarioCamaraService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private authService: AuthService
   ) { }
 
 
   ngOnInit(): void {
+    this.camara = this.authService.getSelectedCamara();
+
+    
     this.route.params.subscribe(params => {
       const id = params['camaraId'];
       if (id) {
         this.currentCamaraId = +id;
         const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
         this.loadUsuariosCamara(eventoInicial);
+
+
+        this.breadcrumbItems = [
+          {label:'Início', routerLink: '/'},
+          {label:'Usuarios'}
+        ];
+    
+    
+        if(!this.camara) this.headerButtons.unshift({ label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/camara/'})
+        this.headerButtons.push({ label: 'Adicionar', icon: 'fa-solid fa-plus', link: `/camara/usuarios/${this.currentCamaraId}/adicionar` })
+    
+        this.setupListComponent();
       }
     });
 
-    this.breadcrumbItems = [
-      {label:'Início', routerLink: '/'},
-      {label:'Usuarios'}
-    ];
+  }
 
-    this.headerButtons = [
-      { label: 'Voltar', icon: 'fa-solid fa-arrow-left', link: '/camara/'},
-      { label: 'Adicionar', icon: 'fa-solid fa-plus', link: `/camara/usuarios/${this.currentCamaraId}/adicionar` }
-    ]
+  /*
+    * Adriano 22-09-2025
+    * Ajustar as dados para adicionar no component
+  */
+  private setupListComponent(): void {
+      this.listColumns = [
+        { field: 'usuario.nome', header: 'Nome' },
+        { field: 'usuario.email', header: 'E-mail' },
+        { field: 'ativo', header: 'Ativo', type: 'badge', badgeConfig: { trueValue: 'Sim', falseValue: 'Não', trueSeverity: 'success', falseSeverity: 'danger' } },
+        
+      ];
+
+      this.listActions = [
+        { actionId: 'edit', icon: 'fa-solid fa-pen', tooltip: 'Editar', severity: 'secondary' },
+        { actionId: 'delete', icon: 'fa-solid fa-trash', tooltip: 'Deletar', severity: 'danger' }
+      ];
+  }
+
+   /**
+   * Adriano 19-09-2025
+   * Controlar a funções que seram chamadas no clique dos botões
+   * @param event 
+   */
+  handleAction(event: { action: ActionDefinition, item: UsuarioCamara }): void {
+    switch (event.action.actionId) {
+      case 'edit':
+        this.router.navigate([`camara/usuarios/${this.currentCamaraId}/editar/${event.item.id}`]);
+        break;
+      case 'delete':
+        this.deleteUsuario(event.item.id);
+        break;
+    }
   }
 
   /**
@@ -98,9 +148,7 @@ export class UsuarioCamaraComponent {
   carregarDados(skip: number, limit: number, filtro?: string){
     this.usuarioCamaraService.getCamaraUsuarios(skip, limit, filtro, this.currentCamaraId).subscribe({
       next: (response: any) => {
-        this.usuariosCamara = response.items;
-        console.log(this.usuariosCamara);
-        
+        this.listData = response.items;
         this.totalRecords = response.total;
         this.isLoading = false;
       },
@@ -125,13 +173,13 @@ export class UsuarioCamaraComponent {
   filtrarUsuarios(){
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadUsuariosCamara(eventoInicial);
+    // this.setupListComponent();
   }
 
 
-  deleteUsuario(event: Event, usuarioId: number) {
+  deleteUsuario(usuarioId: number) {
     
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       header: 'Alerta',
       message: 'Você tem certeza de que deseja excluir este registro?',
       icon: 'pi pi-info-circle',
@@ -149,8 +197,8 @@ export class UsuarioCamaraComponent {
         return this.usuarioCamaraService.deleteCamaraUsuario(usuarioId).subscribe(
           (response: any) => {
             //-- Removendo o usuário da lista
-            const index = this.usuariosCamara.findIndex((s: any) => s.id === usuarioId);
-            if (index !== -1) this.usuariosCamara.splice(index, 1);
+            const index = this.listData.findIndex((s: any) => s.id === usuarioId);
+            if (index !== -1) this.listData.splice(index, 1);
             this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Registro deletado com sucesso.' });
           }, (error) => {
             this.messageService.add({ severity: 'error', summary: 'Alerta', detail: error.error });

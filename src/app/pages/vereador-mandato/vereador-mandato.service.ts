@@ -3,7 +3,7 @@ import { HttpService } from '../../services/http.service';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { MandatoVereador, MandatoVereadorCreate, MandatoVereadorUpdate } from './vereador-mandato.model'
+import { MandatoVereador, MandatoVereadorCreate, MandatoVereadorUpdate, PaginatedMandatoVereadorResponse } from './vereador-mandato.model'
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class VereadorMandatoService {
    * @param skip O número de registros a pular (para a página atual).
    * @param limit O número de registros por página.
   */
-    getVereadorMandato(skip: number = 0, limit: number = 10, filtro?: string, idMandato: number | null = null): Observable<MandatoVereador[]> {
+    getVereadorMandato(skip: number = 0, limit: number = 10, filtro?: string, idMandato: number | null = null): Observable<PaginatedMandatoVereadorResponse> {
       // Usa HttpParams para adicionar os parâmetros de forma segura na URL
       let params = new HttpParams()
         .set('skip', skip.toString())

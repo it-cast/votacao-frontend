@@ -21,6 +21,9 @@ import { HeaderButton } from '../../../components/page-header/page-header.model'
 
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
+import { FormInputComponent} from '../../../components/form-input/form-input.component'
+import { FormMaskComponent} from '../../../components/form-mask/form-mask.component'
+
 
 
 @Component({
@@ -37,7 +40,9 @@ import { PageHeaderComponent } from '../../../components/page-header/page-header
     MessageModule,
     FloatLabelModule,
     InputMaskModule,
-    PageHeaderComponent
+    PageHeaderComponent,
+    FormInputComponent,
+    FormMaskComponent
   ],
   providers: [MessageService],
   templateUrl: './adicionar.component.html',

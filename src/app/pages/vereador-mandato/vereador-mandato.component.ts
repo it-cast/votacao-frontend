@@ -17,23 +17,30 @@ import { VereadorMandatoService } from './vereador-mandato.service';
 
 import { FuncaoNoMandato, FUNCOES_NO_MANDATO_OPCOES, FuncaoExibir } from '../../constants/vereador.constants';
 
-import { MandatoVereador} from './vereador-mandato.model'
+import { MandatoVereador, PaginatedMandatoVereadorResponse} from './vereador-mandato.model'
 import { HeaderButton } from '../../components/page-header/page-header.model';
 
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { ColumnDefinition, ActionDefinition } from '../../components/generic-list/generic-list.model';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
+import { FuncaoComissaoExibir } from '../../constants/comissao.constants';
+
 
 @Component({
   selector: 'app-vereador-mandato',
-  imports: [BreadcrumbModule, Button, CardModule, TableModule,InputTextModule,PageHeaderComponent, BadgeModule,FormsModule, ToastModule, ConfirmDialogModule],
+  imports: [BreadcrumbModule, Button, CardModule, TableModule,InputTextModule,PageHeaderComponent,GenericListComponent, BadgeModule,FormsModule, ToastModule, ConfirmDialogModule],
   templateUrl: './vereador-mandato.component.html',
   styleUrl: './vereador-mandato.component.scss'
 })
 export class VereadorMandatoComponent {
   isLoading           : boolean   = false;
-  vereadoresMandato   : MandatoVereador[] = [];
+  listData   : MandatoVereador[] = [];
   totalRecords        : number    = 0;
   rows                : number    = 10;
   first               : number    = 0;
+
+  listColumns     : ColumnDefinition[] = [];
+  listActions     : ActionDefinition[] = [];
 
   mandatoId            : number    = 0;
   currentMandatoId     : number | null = null;
@@ -63,6 +70,7 @@ export class VereadorMandatoComponent {
         this.currentMandatoId = +id;
         const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
         this.loadVereadoresMandato(eventoInicial);
+        this.setupListComponent();
       }
     });
 
@@ -102,9 +110,11 @@ export class VereadorMandatoComponent {
   */
   carregarDados(skip: number, limit: number, filtro?: string){
     this.vereadorMandatoService.getVereadorMandato(skip, limit, filtro, this.currentMandatoId).subscribe({
-      next: (response: any) => {
-        this.vereadoresMandato = response.items;
-        console.log(this.vereadoresMandato);
+      next: (response: PaginatedMandatoVereadorResponse) => {
+        this.listData = response.items.map(item => ({
+          ...item, // Copia todas as propriedades originais do item
+          funcao_desc: FuncaoExibir(item.funcao) // Adiciona a nova propriedade com o texto da função
+        }));
         
         this.totalRecords = response.total;
         this.isLoading = false;
@@ -132,12 +142,9 @@ export class VereadorMandatoComponent {
     this.loadVereadoresMandato(eventoInicial);
   }
 
-  FuncaoExibir(funcao: number): string { return FuncaoExibir(funcao) }
-
-  deleteVereador(event: Event, vereadorId: number) {
+  deleteVereador(vereadorId: number) {
     
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       header: 'Alerta',
       message: 'Você tem certeza de que deseja excluir este registro?',
       icon: 'pi pi-info-circle',
@@ -155,8 +162,8 @@ export class VereadorMandatoComponent {
         return this.vereadorMandatoService.deleteVereadorMandato(vereadorId).subscribe(
           (response: any) => {
             //-- Removendo o usuário da lista
-            const index = this.vereadoresMandato.findIndex((s: any) => s.id === vereadorId);
-            if (index !== -1) this.vereadoresMandato.splice(index, 1);
+            const index = this.listData.findIndex((s: any) => s.id === vereadorId);
+            if (index !== -1) this.listData.splice(index, 1);
             this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Registro deletado com sucesso.' });
           }, (error) => {
             this.messageService.add({ severity: 'error', summary: 'Alerta', detail: error.error });
@@ -168,4 +175,42 @@ export class VereadorMandatoComponent {
       },
     });
   }
+
+
+
+    /*
+      * Adriano 22-09-2025
+      * Ajustar as dados para adicionar no component
+    */
+    private setupListComponent(): void {
+        this.listColumns = [
+          { field: 'vereador.nome', header: 'Nome' },
+          { field: 'vereador.email', header: 'E-mail' },
+          { field: 'vereador.partido', header: 'Partido'},
+          { field: 'funcao_desc', header: 'Função'},
+          { field: 'vereador.ativo', header: 'Ativo', type: 'badge', badgeConfig: { trueValue: 'Sim', falseValue: 'Não', trueSeverity: 'success', falseSeverity: 'danger' } },
+          
+        ];
+  
+        this.listActions = [
+          { actionId: 'edit', icon: 'fa-solid fa-pen', tooltip: 'Editar', severity: 'secondary' },
+          { actionId: 'delete', icon: 'fa-solid fa-trash', tooltip: 'Deletar', severity: 'danger' }
+        ];
+    }
+  
+     /**
+     * Adriano 19-09-2025
+     * Controlar a funções que seram chamadas no clique dos botões
+     * @param event 
+     */
+    handleAction(event: { action: ActionDefinition, item: MandatoVereador }): void {
+      switch (event.action.actionId) {
+        case 'edit':
+          this.router.navigate([`mandato/vereadores/${this.currentMandatoId}/editar/${event.item.id}`]);
+          break;
+        case 'delete':
+          this.deleteVereador(event.item.id);
+          break;
+      }
+    }
 }

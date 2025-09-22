@@ -10,6 +10,9 @@ import { BadgeModule } from 'primeng/badge';
 import { ColumnDefinition, ActionDefinition } from './generic-list.model';
 import { LazyLoadEvent } from 'primeng/api';
 
+import { PhonePipe } from '../../pipes/phone.pipe';
+import { CpfCnpjPipe } from '../../pipes/cpf-cnpj.pipe';
+import { DatePipe } from '@angular/common'; 
 
 
 @Component({
@@ -19,7 +22,10 @@ import { LazyLoadEvent } from 'primeng/api';
      CardModule,
      ButtonModule,
      TooltipModule,
-     BadgeModule
+     BadgeModule,
+     PhonePipe,
+     CpfCnpjPipe,
+     DatePipe
   ],
   templateUrl: './generic-list.component.html',
   styleUrl: './generic-list.component.scss'

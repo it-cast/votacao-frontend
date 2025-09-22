@@ -1,27 +1,30 @@
-import { Component, Input, forwardRef, OnInit, Injector, ChangeDetectorRef, EventEmitter, Output } from '@angular/core'; // 1. Importar ChangeDetectorRef
+import { Component, Input, forwardRef, OnInit, Injector, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
+
+// Imports do PrimeNG
+import { InputMaskModule } from 'primeng/inputmask';
 import { MessageModule } from 'primeng/message';
 
 @Component({
-  selector: 'app-form-input',
+  selector: 'app-form-mask',
   standalone: true,
-  imports: [FormsModule, InputTextModule, MessageModule],
-  templateUrl: './form-input.component.html',
+  imports: [FormsModule, InputMaskModule, MessageModule],
+  templateUrl: './form-mask.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FormInputComponent),
+      useExisting: forwardRef(() => FormMaskComponent),
       multi: true
     }
   ]
 })
-export class FormInputComponent implements ControlValueAccessor, OnInit {
+export class FormMaskComponent implements ControlValueAccessor, OnInit {
+
   @Input() label: string = '';
   @Input() name: string = '';
-  @Input() type: 'text' | 'datetime-local' | 'email' | 'number' | 'tel' | 'url' | 'date' | 'password' = 'text';
-  @Input() required: boolean = false;
+  @Input() mask: string = ''; // Input para a máscara (ex: '99.999.999/9999-99')
   @Input() placeholder: string = '';
+  @Input() required: boolean = false;
   @Input() disabled: boolean = false;
 
   @Output() blurEvent = new EventEmitter<void>();
@@ -33,9 +36,6 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
   onChange: any = () => {};
   onTouched: any = () => {};
 
-  
-
-  // 2. Injetar o ChangeDetectorRef no construtor
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef 
@@ -45,13 +45,8 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
     this.ngControl = this.injector.get(NgControl, null);
   }
 
-  // Chamado quando o valor do formulário muda externamente
   writeValue(value: any): void {
     this.value = value;
-    
-    // 3. A CORREÇÃO PRINCIPAL:
-    // Avisa o Angular que o estado interno deste componente mudou
-    // e que ele precisa ser verificado e atualizado na tela.
     this.cdr.markForCheck();
   }
 
@@ -65,9 +60,9 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
 
   setDisabledState?(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
-    // Também é uma boa prática marcar para verificação aqui
     this.cdr.markForCheck();
   }
+
 
   onBlur() {
     this.onTouched();

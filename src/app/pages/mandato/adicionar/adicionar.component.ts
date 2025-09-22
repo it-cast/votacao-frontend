@@ -22,13 +22,18 @@ import { HeaderButton } from '../../../components/page-header/page-header.model'
 
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
+import { FormInputComponent } from '../../../components/form-input/form-input.component';
+import { FormSelectComponent } from '../../../components/form-select/form-select.component';
+import { FormTextareaComponent } from '../../../components/form-textarea/form-textarea.component';
+
+
 
 
 
 
 @Component({
   selector: 'app-adicionar',
-  imports: [BreadcrumbModule, ButtonModule, CardModule,InputTextModule,PageHeaderComponent,TextareaModule, MessageModule,SelectModule, ToastModule, FormsModule],
+  imports: [BreadcrumbModule, ButtonModule, CardModule,InputTextModule, FormInputComponent, FormSelectComponent, FormTextareaComponent,PageHeaderComponent,TextareaModule, MessageModule,SelectModule, ToastModule, FormsModule],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss'
 })
