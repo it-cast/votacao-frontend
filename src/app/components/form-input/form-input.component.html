@@ -1,0 +1,32 @@
+<div class="p-field flex flex-col mt-4">
+  <label [for]="name" class="font-bold mb-2">
+    {{ label }}
+    @if (required) {
+      <span class="text-red-500">*</span>
+    }
+  </label>
+  
+  <input 
+    [type]="type"
+    pInputText
+    [id]="name"
+    [name]="name"
+    [required]="required"
+    [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouched()"
+    [disabled]="isDisabled"
+    [placeholder]="placeholder"
+    class="w-full" />
+
+  @if (ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)) {
+    <div class="mt-1">
+      @if (ngControl?.errors?.['required']) {
+        <p-message severity="error" variant="simple" size="small">Campo obrigatório!</p-message>
+      }
+      @if (ngControl?.errors?.['email']) {
+        <p-message severity="error" variant="simple" size="small">Formato de e-mail inválido.</p-message>
+      }
+    </div>
+  }
+</div>

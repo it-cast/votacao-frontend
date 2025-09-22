@@ -1,0 +1,31 @@
+<div class="p-field flex flex-col mt-4">
+  <label [for]="name" class="font-bold mb-2">
+    {{ label }}
+    @if (required) {
+      <span class="text-red-500">*</span>
+    }
+  </label>
+
+  <p-select 
+    [options]="options" 
+    [name]="name"
+    [required]="required"
+    [optionLabel]="optionLabel"
+    [optionValue]="optionValue"
+    [placeholder]="placeholder"
+    [(ngModel)]="value"
+    (onChange)="onChange($event.value)"
+    (onBlur)="onTouched()"
+    [disabled]="isDisabled"
+    class="w-full"
+    [class]="ngControl?.invalid && ngControl?.touched ? 'ng-invalid ng-dirty' : ''">
+  </p-select>
+  
+  @if (ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)) {
+    <div class="mt-1">
+      @if (ngControl?.errors?.['required']) {
+        <p-message severity="error" variant="simple" size="small">Campo obrigatório!</p-message>
+      }
+    </div>
+  }
+</div>

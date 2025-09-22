@@ -22,6 +22,8 @@ import { ComissaoCreate } from '../comissao.model';
 import { HeaderButton } from '../../../components/page-header/page-header.model';
 
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import { FormInputComponent } from '../../../components/form-input/form-input.component';
+import { FormSelectComponent } from '../../../components/form-select/form-select.component';
 
 @Component({
   selector: 'app-adicionar',
@@ -37,7 +39,9 @@ import { PageHeaderComponent } from '../../../components/page-header/page-header
     MessageModule, 
     ToastModule,
     SelectModule,
-    PageHeaderComponent
+    PageHeaderComponent,
+    FormInputComponent,
+    FormSelectComponent
   ],
   templateUrl: './adicionar.component.html',
   styleUrls: ['./adicionar.component.scss'],

@@ -1,0 +1,60 @@
+<div>
+    <app-page-header [breadcrumbItems]="breadcrumbItems" [buttons]="headerButtons"></app-page-header>
+
+    <div class="w-full max-w-5xl">
+        <p-card [header]="pageTitle">
+            <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                    
+                    <div class="mb-3">
+                        <app-form-select
+                            label="Vereador"
+                            name="mandato_vereador_id"
+                            [options]="vereadoresDisponiveis"
+                            optionLabel="vereador.nome" 
+                            optionValue="id"
+                            placeholder="Selecione um vereador do mandato ativo"
+                            [(ngModel)]="formCadastro.mandato_vereador_id"
+                            [required]="true">
+                        </app-form-select>
+                    </div>
+
+                    <div class="mb-3">
+                        <app-form-select
+                            label="Função na Comissão"
+                            name="funcao"
+                            [options]="FUNCOES_NA_COMISSAO_OPCOES"
+                            [(ngModel)]="formCadastro.funcao"
+                            [required]="true">
+                        </app-form-select>
+                    </div>
+
+                    <div class="mb-3">
+                        <app-form-input
+                            label="Data de Início"
+                            name="data_inicio"
+                            type="date"
+                            [(ngModel)]="formCadastro.data_inicio"
+                            [required]="true">
+                        </app-form-input>
+                    </div>
+
+                    <div class="mb-3">
+                        <app-form-input
+                            label="Data de Fim"
+                            name="data_fim"
+                            type="date"
+                            [(ngModel)]="formCadastro.data_fim"
+                            [required]="true">
+                        </app-form-input>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex justify-end">
+                    <p-button label="Salvar" type="submit" [loading]="isLoading"></p-button>
+                </div>
+            </form>
+        </p-card>
+    </div>
+</div>
+<p-toast />

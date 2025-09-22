@@ -20,8 +20,10 @@ import { AuthService, Camara } from '../../services/auth.service';
 
 import { Comissao } from './comissao.model';
 import { HeaderButton } from '../../components/page-header/page-header.model';
+import { ColumnDefinition, ActionDefinition } from '../../components/generic-list/generic-list.model';
 
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
 
 @Component({
   selector: 'app-comissao',
@@ -39,7 +41,8 @@ import { PageHeaderComponent } from '../../components/page-header/page-header.co
     TooltipModule,
     ToastModule,
     BadgeModule,
-    PageHeaderComponent
+    PageHeaderComponent,
+    GenericListComponent
 ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './comissao.component.html',
@@ -48,11 +51,15 @@ import { PageHeaderComponent } from '../../components/page-header/page-header.co
 export class ComissaoComponent implements OnInit {
 
   isLoading: boolean = false;
-  comissoes: Comissao[] = [];
-  totalRecords: number = 0;
+ 
   rows: number = 10;
   first: number = 0;
   camara: Camara | null = null;
+
+  listData                    : Comissao[] = [];
+  listColumns                 : ColumnDefinition[] = [];
+  listActions                 : ActionDefinition[] = [];
+  totalRecords                : number = 0;
 
   private ultimoLazyLoadEvent: LazyLoadEvent = { first: 0, rows: this.rows };
   formFiltro: any = { filtro: '' }
@@ -82,6 +89,8 @@ export class ComissaoComponent implements OnInit {
 
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadComissoes(eventoInicial);
+
+    this.setupListComponent();
   }
 
   /**
@@ -107,7 +116,7 @@ export class ComissaoComponent implements OnInit {
   carregarComissoes(skip: number, limit: number, filtro?: string) {
     this.comissaoService.getComissoes(skip, limit, filtro, this.camara?.id).subscribe({
       next: (response: any) => {
-        this.comissoes = response.items;
+        this.listData = response.items;
         this.totalRecords = response.total;
         this.isLoading = false;
       },
@@ -121,6 +130,46 @@ export class ComissaoComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+
+   /**
+   * Adriano 19-09-2025
+   * Definindo as colunas da table 
+   */
+  private setupListComponent(): void {
+    this.listColumns = [
+      { field: 'nome', header: 'Nome' },
+      { field: 'ativa', header: 'Ativa', type: 'badge', badgeConfig: { trueValue: 'Sim', falseValue: 'Não', trueSeverity: 'success', falseSeverity: 'danger' } },
+      { field: 'data_inicio_formatada', header: 'Data Início' },
+      { field: 'data_fim_formatada', header: 'Data Fim' },
+      { field: 'dt_cadastro_formatada', header: 'Data de Cadastro' }
+    ];
+
+    this.listActions = [
+      { actionId: 'membros', icon: 'fa-solid fa-users', tooltip: 'Membros', severity: 'secondary'},
+      { actionId: 'edit', icon: 'fa-solid fa-pen', tooltip: 'Editar', severity: 'secondary' },
+      { actionId: 'delete', icon: 'fa-solid fa-trash', tooltip: 'Deletar', severity: 'danger' }
+    ];
+  }
+
+  /**
+   * Adriano 19-09-2025
+   * Definindo qual ação será chamada no botão de acordo com sua função
+   * @param event 
+  */
+  handleAction(event: { action: ActionDefinition, item: Comissao }): void {
+    switch (event.action.actionId) {
+      case 'membros':
+        this.router.navigate([`/comissao/membros/${event.item.id}`]);
+        break;
+      case 'edit':
+        this.router.navigate([`/comissao/editar/${event.item.id}`]);
+        break;
+      case 'delete':
+        this.deleteComissao(event.item.id);
+        break;
+    }
   }
 
   /**
@@ -137,9 +186,9 @@ export class ComissaoComponent implements OnInit {
    * @param event
    * @param comissaoId
    */
-  deleteComissao(event: Event, comissaoId: number) {
+  deleteComissao(comissaoId: number) {
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
+     
       header: 'Alerta',
       message: 'Você tem certeza de que deseja excluir este registro?',
       icon: 'pi pi-info-circle',
@@ -155,9 +204,9 @@ export class ComissaoComponent implements OnInit {
       accept: () => {
         this.comissaoService.deleteComissao(comissaoId).subscribe({
           next: () => {
-            const index = this.comissoes.findIndex((s: any) => s.id === comissaoId);
+            const index = this.listData.findIndex((s: any) => s.id === comissaoId);
             if (index !== -1) {
-                this.comissoes.splice(index, 1);
+                this.listData.splice(index, 1);
                 this.totalRecords--;
             }
             this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Registro deletado com sucesso.' });

@@ -1,0 +1,64 @@
+<p-card>
+    <ng-content select="[slot='filters']"></ng-content>
+
+    <p-table 
+        [value]="data" 
+        [loading]="loading"
+        stripedRows 
+        [responsive]="true"
+        [paginator]="true" 
+        [rows]="rows"
+        [totalRecords]="totalRecords"
+        [lazy]="true"
+        (onPage)="onPage($event)">
+        
+        <ng-template pTemplate="header">
+            <tr>
+                @for (col of columns; track col.field) {
+                    <th [pSortableColumn]="col.field">{{ col.header }} <p-sortIcon [field]="col.field" /></th>
+                }
+                <th class="flex justify-end">Opções</th>
+            </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                @for (col of columns; track col.field) {
+                    <td>
+                        @switch (col.type) {
+                            @case ('badge') {
+                                <p-badge 
+                                    [value]="(resolveNestedValue(item, col.field) ? col.badgeConfig?.trueValue : col.badgeConfig?.falseValue) || ''" 
+                                    [severity]="$any(resolveNestedValue(item, col.field) ? col.badgeConfig?.trueSeverity : col.badgeConfig?.falseSeverity)" />
+                            }
+                            @default {
+                                {{ resolveNestedValue(item, col.field) }}
+                            }
+                        }
+                    </td>
+                }
+                
+                <td class="flex justify-end">
+                    @for (action of actions; track action.actionId) {
+                        <p-button 
+                            [icon]="action.icon" 
+                            [rounded]="true" 
+                            [text]="true" 
+                            [severity]="$any(action.severity)"
+                            [pTooltip]="action.tooltip" 
+                            tooltipPosition="top"
+                            (click)="emitAction(action, item)" />
+                    }
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td [attr.colspan]="columns.length + 1" class="text-center">Nenhum registro encontrado.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <ng-content select="[slot='dialogs']"></ng-content>
+</p-card>
