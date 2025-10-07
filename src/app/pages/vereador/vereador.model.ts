@@ -27,6 +27,9 @@ export interface Vereador extends VereadorBase {
   ativo: number;
   dt_cadastro: string; 
   dt_atualizado: string; 
+  ativo_desc: string;
+  dt_cadastro_formatada: string;
+  dt_atualizado_formatada: string;
 }
 
 /**

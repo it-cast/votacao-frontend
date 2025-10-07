@@ -1,0 +1,29 @@
+<div>
+    <app-page-header [breadcrumbItems]="breadcrumbItems" [buttons]="headerButtons"></app-page-header>
+    
+    <app-generic-list
+        [data]="listData"
+        [columns]="listColumns"
+        [actions]="listActions"
+        [loading]="isLoading"
+        [totalRecords]="totalRecords"
+        [rows]="rows"
+        (onPageChange)="loadVereadores($event)"
+        (onActionClick)="handleAction($event)">
+
+        <div slot="filters" class="flex flex-wrap gap-4 mb-6 items-end">
+            <div class="flex-auto">
+                <label for="filtro" class="font-bold block mb-2">Filtro</label>
+                <input id="filtro" type="text" pInputText class="w-full" placeholder="Nome | email" [(ngModel)]="formFiltro.filtro" (keydown.enter)="filtrar()" />
+            </div>   
+            <div class="flex-none flex gap-2">
+                <p-button label="Filtrar" icon="pi pi-search" (onClick)="filtrar()"></p-button>
+            </div>
+        </div>
+
+        <div slot="dialogs">
+            <p-confirmdialog />
+            <p-toast />
+        </div>
+    </app-generic-list>
+</div>

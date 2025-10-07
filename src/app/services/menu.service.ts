@@ -16,11 +16,11 @@ export class MenuService {
   private menuItemsSource = new BehaviorSubject<AppMenuItem[]>([]);
   public menuItems$: Observable<AppMenuItem[]> = this.menuItemsSource.asObservable();
 
-  // --- Constantes de Menu movidas para dentro do serviço ---
   private readonly SUPERUSER_MENU_ITEMS: AppMenuItem[] = [
     { label: 'Dashboard', icon: 'fa-solid fa-chart-line', link: '/dashboard' },
-    { label: 'Câmaras', icon: 'fa-solid fa-building-columns', link: '/camara' },
     { label: 'Usuários', icon: 'fa-solid fa-users', link: '/usuario' },
+    { label: 'Câmaras', icon: 'fa-solid fa-building-columns', link: '/camara' },
+    { label: 'Vereadores', icon: 'fa-solid fa-user-tie', link: '/vereador'}
   ];
 
   constructor(private authService: AuthService) {
@@ -75,7 +75,6 @@ export class MenuService {
       return this.SUPERUSER_MENU_ITEMS;
     }
 
-    //-- Itens de menu base para utilizadores normais (agora definidos aqui para serem dinâmicos)
     const regularUserBaseMenu: AppMenuItem[] = [
         { label: 'Dashboard', icon: 'fa-solid fa-chart-line', link: '/dashboard' },
         { label: 'Usuários', icon: 'fa-solid fa-users', link: `/camara/usuarios/${selectedCamara?.id}` },

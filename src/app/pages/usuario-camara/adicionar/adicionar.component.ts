@@ -29,6 +29,8 @@ import { PageHeaderComponent } from '../../../components/page-header/page-header
 import {  FormInputComponent } from '../../../components/form-input/form-input.component';
 import { FormSelectComponent } from '../../../components/form-select/form-select.component';
 import { AuthService } from '../../../services/auth.service';
+import { VereadorService } from '../../vereador/vereador.service';
+import { VereadorBase } from '../../vereador/vereador.model';
 
 
 export interface Message {
@@ -62,6 +64,7 @@ export class AdicionarComponent {
     public readonly PAPEIS_NA_CAMARA_OPCOES   = PAPEIS_NA_CAMARA_OPCOES;
 
 
+    vereadores: VereadorBase[] = [];
     isLoading : boolean = false;
     active    : number  = 0
 
@@ -70,6 +73,7 @@ export class AdicionarComponent {
       ativo: UsuarioAtivoStatus.SIM,
       camara_id: 0,
       papel: PapelNaCamara.ADMINISTRATIVO,
+      vereador_id: null,
       permissao: [],
       usuario: {
         id: null,
@@ -107,6 +111,7 @@ export class AdicionarComponent {
       private route: ActivatedRoute,
       private usuarioService: UsuarioService,
       private usuarioCamaraService: UsuarioCamaraService,
+      private vereadorService: VereadorService,
       private authService: AuthService
 
     ){
@@ -115,6 +120,7 @@ export class AdicionarComponent {
     
     ngOnInit() {
       this.usuarioAuth = this.authService.getUser();
+      this.loadVereadores();
       console.log(this.usuarioAuth);
       
       
@@ -186,6 +192,24 @@ export class AdicionarComponent {
       }  
     }
 
+
+    /**
+     * Adriano 01-10-2025
+     * Carrega a lista de vereadores para o dropdown.
+     * Usamos um limite alto para buscar todos, já que é para um campo de seleção.
+     */
+    loadVereadores() {
+      this.vereadorService.getVereadores(0, 9999).subscribe({
+        next: (response) => {
+          this.vereadores = response.items;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar vereadores:', err);
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar a lista de vereadores.' });
+        }
+      });
+    }
+
     /**
      * Adriano 15-09-2025
      * Recupera todas as permissões selecionadas e armazena na variavel selectedFiles
@@ -251,7 +275,7 @@ export class AdicionarComponent {
      * @param dados O objeto recebido da sua API.
     */
     preencherFormularioComFor(dados: any): void {
-      // 1. Define as chaves que podem ser copiadas diretamente para o formulário principal
+      // 1. Define as chaves que podem ser copiadas diretamente para o formulário principal (exceto 'ativo' e 'permissao')
       const chavesPrincipais = ['id', 'camara_id', 'papel'];
 
       for (const chave of chavesPrincipais) {
@@ -259,6 +283,11 @@ export class AdicionarComponent {
         if (chave in dados && chave in this.formCadastro) {
           (this.formCadastro as any)[chave] = dados[chave];
         }
+      }
+
+      // Copia o vereador_id se ele existir
+      if ('vereador_id' in dados) {
+        this.formCadastro.vereador_id = dados.vereador_id;
       }
 
       // 2. Define as chaves que podem ser copiadas diretamente para o usuário aninhado

@@ -30,11 +30,10 @@ import { PageHeaderComponent } from '../../../components/page-header/page-header
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
 import { FormSelectComponent } from '../../../components/form-select/form-select.component';
 import { FormMaskComponent } from '../../../components/form-mask/form-mask.component';
-import { FormTextareaComponent } from "../../../components/form-textarea/form-textarea.component";
 
 @Component({
   selector: 'app-adicionar',
-  imports: [BreadcrumbModule, ButtonModule, CardModule, PageHeaderComponent, FormInputComponent, FormSelectComponent, FormMaskComponent, SelectModule, MessageModule, InputMaskModule, ToastModule, CommonModule, FormsModule, InputTextModule, FormTextareaComponent],
+  imports: [BreadcrumbModule, ButtonModule, CardModule, PageHeaderComponent, FormInputComponent, FormSelectComponent, FormMaskComponent, SelectModule, MessageModule, InputMaskModule, ToastModule, CommonModule, FormsModule, InputTextModule],
   templateUrl: './adicionar.component.html',
   styleUrl: './adicionar.component.scss',
   providers: [MessageService]

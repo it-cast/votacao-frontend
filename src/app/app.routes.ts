@@ -30,6 +30,11 @@ import { AdicionarComponent as AdicionarComissaoComponent } from './pages/comiss
 import { ComissaoMembroComponent } from './pages/comissao-membro/comissao-membro.component';
 import { AdicionarComponent as AdicionarComissaoMembroComponent } from './pages/comissao-membro/adicionar/adicionar.component';
 
+import { VereadorComponent} from './pages/vereador/vereador.component';
+import { AdicionarComponent as AdicionarVereadorComponent } from './pages/vereador/adicionar/adicionar.component';
+
+
+
 import { AcessoComponent } from './pages/acesso/acesso.component';
 
 
@@ -83,6 +88,11 @@ export const routes: Routes = [
       { path: 'comissao/membros/:comissaoId', component: ComissaoMembroComponent},
       { path: 'comissao/membros/:comissaoId/adicionar', component: AdicionarComissaoMembroComponent},
       { path: 'comissao/membros/:comissaoId/editar/:id', component: AdicionarComissaoMembroComponent},
+
+      {path: 'vereador', component: VereadorComponent},
+      {path: 'vereador/adicionar', component: AdicionarVereadorComponent},
+      {path: 'vereador/editar/:id', component: AdicionarVereadorComponent},
+
 
 
       { path: 'acesso', component: AcessoComponent }

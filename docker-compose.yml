@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: angular_app
+    # Constrói a imagem usando o Dockerfile no diretório atual
+    build: .
+    ports:
+      # Mapeia a porta 4200 da sua máquina para a porta 80 do contêiner
+      - "4200:80"

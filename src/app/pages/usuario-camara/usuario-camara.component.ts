@@ -19,6 +19,7 @@ import { MenuItem } from 'primeng/api';
 import { AuthService, Camara } from '../../services/auth.service';
 
 import { UsuarioCamara } from './usuario-camara.model'
+import { PAPEIS_NA_CAMARA_OPCOES } from '../../constants/usuario.constants';
 import { HeaderButton } from '../../components/page-header/page-header.model';
 
 import { PageHeaderComponent} from '../../components/page-header/page-header.component'
@@ -51,6 +52,7 @@ export class UsuarioCamaraComponent {
   headerButtons: HeaderButton[] = [];
 
   camara: Camara | null = null;
+ 
 
 
   constructor(
@@ -60,7 +62,8 @@ export class UsuarioCamaraComponent {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private authService: AuthService
-  ) { }
+  ) {
+  }
 
 
   ngOnInit(): void {
@@ -98,6 +101,8 @@ export class UsuarioCamaraComponent {
       this.listColumns = [
         { field: 'usuario.nome', header: 'Nome' },
         { field: 'usuario.email', header: 'E-mail' },
+        { field: 'papel_desc', header: 'Papel'},
+        { field: 'vereador_nome', header: 'Vereador'},
         { field: 'ativo', header: 'Ativo', type: 'badge', badgeConfig: { trueValue: 'Sim', falseValue: 'Não', trueSeverity: 'success', falseSeverity: 'danger' } },
         
       ];
@@ -148,9 +153,21 @@ export class UsuarioCamaraComponent {
   carregarDados(skip: number, limit: number, filtro?: string){
     this.usuarioCamaraService.getCamaraUsuarios(skip, limit, filtro, this.currentCamaraId).subscribe({
       next: (response: any) => {
-        this.listData = response.items;
+        
+        this.listData = response.items.map((item: UsuarioCamara) => {
+          const papelEncontrado = PAPEIS_NA_CAMARA_OPCOES.find(papel => papel.key === item.papel);
+
+          return {
+            ...item, 
+            papel_desc: papelEncontrado?.value || 'Não definido',
+            vereador_nome: item.vereador?.nome || '',
+          };
+        });
         this.totalRecords = response.total;
         this.isLoading = false;
+
+        console.log(this.listData);
+        
       },
       error: (erro) => {
         console.error('Erro ao buscar usuários:', erro);
@@ -173,7 +190,6 @@ export class UsuarioCamaraComponent {
   filtrarUsuarios(){
     const eventoInicial: LazyLoadEvent = { first: this.first, rows: this.rows };
     this.loadUsuariosCamara(eventoInicial);
-    // this.setupListComponent();
   }
 
 

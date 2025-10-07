@@ -1,0 +1,82 @@
+<div>
+    <app-page-header [breadcrumbItems]="breadcrumbItems" [buttons]="headerButtons"></app-page-header>
+
+    <div class="w-full max-w-5xl">
+        <p-card >
+            <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+    
+                <!-- Campo Nome -->
+                <div class="p-field flex flex-col mt-4">
+                    <app-form-input
+                     label="Nome"
+                     name="nome"
+                     type="text"
+                     [(ngModel)]="formCadastro.nome"
+                     [required]="true"
+                    ></app-form-input>
+                </div>
+    
+                <!-- Campo Email -->
+                <div class="p-field flex flex-col mt-4">
+                    <app-form-input
+                     label="E-mail"
+                     name="email"
+                     [(ngModel)]="formCadastro.email"
+                     [required]="true"
+                     type="email"
+                    ></app-form-input>
+                </div> 
+
+                <div class="p-field flex flex-col mt-4">
+                    <app-form-mask
+                        label="Telefone"
+                        name="telefone"
+                        mask="(99) 99999-9999"
+                        [(ngModel)]="formCadastro.telefone"
+                        [required]="true"
+                    ></app-form-mask>
+                </div>
+
+                 <div class="p-field flex flex-col mt-4">
+                    <app-form-mask
+                        label="CPF"
+                        name="cpf"
+                        type="text"
+                        [(ngModel)]="formCadastro.cpf"
+                        [required]="true"
+                        [mask]="'999.999.999-99'"
+                    ></app-form-mask>
+                </div>
+    
+                <!-- Campo Ativo -->
+                 <div class="p-field flex flex-col mt-4">
+                    <app-form-select
+                     label="Situação"
+                     name="ativo"
+                     [options]="USUARIO_ATIVO_OPCOES"
+                     [(ngModel)]="formCadastro.ativo"
+                     [required]="true"
+                    ></app-form-select>
+                </div>
+
+                 <div class="p-field flex flex-col mt-4">
+                    <app-form-input
+                     label="Partido"
+                     name="partido"
+                     type="text"
+                     [(ngModel)]="formCadastro.partido"
+                     [required]="true"
+                    ></app-form-input>
+                </div>
+            
+                <!-- Botão Salvar/Atualizar -->
+                <div class="mt-6 md:col-span-2 flex justify-end">
+                    <p-button [label]="isEditMode ? 'Atualizar' : 'Salvar'" type="submit" [loading]="isLoading"></p-button>
+                </div>
+            </form>
+        </p-card>
+    </div>
+</div>
+
+<!-- O p-toast é crucial para exibir as mensagens de sucesso/erro -->
+<p-toast />

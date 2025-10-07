@@ -150,20 +150,23 @@ export class AdicionarComponent implements OnInit {
   }
 
   /**
-   * Cria uma cópia limpa do formulário, removendo caracteres de máscara.
-   * Esta função funciona perfeitamente com p-inputMask.
+   * Prepara o payload para envio, limpando os campos mascarados.
    */
   private preparePayload(): CamaraCreate {
     const payload = { ...this.formCadastro };
 
-    // Remove qualquer coisa que não seja dígito
-    if (payload.cnpj) {
-      payload.cnpj = String(payload.cnpj).replace(/\D/g, '');
-    }
-    if (payload.telefone) {
-      payload.telefone = String(payload.telefone).replace(/\D/g, '');
-    }
+    payload.cnpj = this.cleanMaskedValue(payload.cnpj);
+    payload.telefone = this.cleanMaskedValue(payload.telefone);
 
     return payload;
+  }
+
+  /**
+   * Remove todos os caracteres não numéricos de uma string.
+   * @param value O valor da string a ser limpa.
+   * @returns A string contendo apenas dígitos.
+   */
+  private cleanMaskedValue(value: string | null | undefined): string {
+    return value ? String(value).replace(/\D/g, '') : '';
   }
 }

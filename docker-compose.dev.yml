@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend-dev:
+    container_name: angular_app_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./src:/app/src
